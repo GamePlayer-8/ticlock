@@ -9,7 +9,7 @@ def reload_maps():
         'User-Agent': 'splatoon3.ink for ticlock',
         'From': 'github.com/rexxt'
     }
-    req = requests.get('https://splatoon3.ink/data/schedules.json', headers='')
+    req = requests.get('https://splatoon3.ink/data/schedules.json', headers=headers)
     return req.json()
 
 last_update = 0
