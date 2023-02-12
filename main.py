@@ -151,4 +151,5 @@ except KeyboardInterrupt:
 except Exception as e:
     main_log_stream.error(f'Error in application {current_app}: {e}')
     print(main_log_stream.brief())
-    current_app_id = apps_list.index(0)
+    current_app = 'clock'
+    current_app_id = apps_list.index(current_app)
