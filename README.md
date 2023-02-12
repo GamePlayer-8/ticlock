@@ -2,6 +2,9 @@
 
  who needs a tidbyt when you have **ti**ny **clock**
 
+![ticlock with clock app open](https://github.com/Rexxt/ticlock/blob/main/docs/clock.png?raw=true)
+![ticlock with clock app and menu open](https://github.com/Rexxt/ticlock/blob/main/docs/clockwithmenu.png?raw=true)
+
 ## how use????
 
 ### prerequisites

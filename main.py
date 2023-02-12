@@ -115,9 +115,11 @@ try:
 
                 render_str += term.move_xy(floor(term.width/2 - 0.125*term.width), floor(term.height/2) + 3) + term.blue(progress.loader(floor(0.25*term.width)))
             
+            menu_y = term.height - 4
+
             if menu_keypresses == 2:
-                render_str += term.move_xy(0, term.height - 6) + term.on_blue(term.clear_eol + term.on_cyan('ticlock') + f' menu ・ (←/→) change application - (Enter) open application - (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS')
-                render_str += term.move_xy(0, term.height - 5) + term.on_gray(term.clear_eol + construct_applications_list(apps_list, current_app_id))
+                render_str += term.move_xy(0, menu_y) + term.on_blue(term.clear_eol + term.on_cyan('ticlock') + f' menu ・ (←/→) change application - (Enter) open application - (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS')
+                render_str += term.move_xy(0, menu_y + 1) + term.on_gray(term.clear_eol + construct_applications_list(apps_list, current_app_id))
 
                 if kb.Key.left in key_inputs:
                     if (key_inputs[kb.Key.left]-1) % 30 == 0:
