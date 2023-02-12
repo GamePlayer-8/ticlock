@@ -144,3 +144,7 @@ except KeyboardInterrupt:
     print('here\'s what went on in the main log stream:')
     print(main_log_stream.brief())
     exit()
+except Exception as e:
+    main_log_stream.error(f'Error in application {current_app}: {e}')
+    current_app = 'readlogs'
+    current_app_id = apps_list.index(current_app)

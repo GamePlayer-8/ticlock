@@ -15,7 +15,8 @@ class Logger:
             session_file = open(self.session_file_path, 'a+', encoding='utf-8')
         else:
             session_file = open(self.session_file_path, 'w+', encoding='utf-8')
-        session_file.write('--- ' + datetime.now().strftime('%D/%m/%Y %H:%M:%S') + '\n')
+        self.current_session_time = datetime.now().strftime('%D/%m/%Y %H:%M:%S')
+        session_file.write('--- ' + self.current_session_time + '\n')
         session_file.close()
 
     def create_log_entry(self, type, message):
@@ -58,16 +59,23 @@ class Logger:
         lines = session_file.readlines()
         regular_log_counts = 0
         titles = 0
+        entries = 0
         other_logs = ''
+        reading = False
         for line in lines:
             if line.startswith('--- '):
-                titles += 1
+                if reading:
+                    titles += 1
+                if line == f'--- {self.current_session_time}':
+                    reading = True
                 continue
-            if line.split(' ')[2] == '[📄]':
-                regular_log_counts += 1
-            else:
-                other_logs += line
+            if reading:
+                entries += 1
+                if line.split(' ')[2] == '[📄]':
+                    regular_log_counts += 1
+                else:
+                    other_logs += line
 
         session_file.close()
         
-        return term.bold(str(len(lines) - titles)) + ' entries, of which ' + term.bold(str(regular_log_counts)) + ' regular entries.' + (f' found important entries:\n{other_logs}' if len(other_logs) > 0 else '')
+        return term.bold(str(entries - titles)) + ' entries, of which ' + term.bold(str(regular_log_counts)) + ' regular entries.' + (f' found important entries:\n{other_logs}' if len(other_logs) > 0 else '')
