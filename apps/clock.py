@@ -1,7 +1,7 @@
 import datetime, time
 from blessed import Terminal
-import apps._7sd as _7sd
-import apps._progress_bar as progress
+import modules._7sd as _7sd
+import modules.progress_bar as progress
 
 term = Terminal()
 

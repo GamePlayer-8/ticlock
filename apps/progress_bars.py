@@ -1,7 +1,7 @@
 from blessed import Terminal
 from math import floor
 from time import time
-import apps._progress_bar as progress
+import modules.progress_bar as progress
 term = Terminal()
 
 def update(dt, keys):

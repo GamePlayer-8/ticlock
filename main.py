@@ -1,10 +1,12 @@
 from blessed import Terminal
 from sys import exit
 from math import floor
-import apps._progress_bar as progress
+import modules.progress_bar as progress
 import os, importlib, time, pynput.keyboard as kb
+from modules.log import Logger
 
 term = Terminal()
+main_log_stream = Logger('ticlock-main')
 
 apps = {}
 current_app = 'clock'
@@ -50,6 +52,8 @@ def reload_apps():
         spec.loader.exec_module(module)
         apps[mod_name] = module
 
+        main_log_stream.log(f'Loaded application {mod_name}.')
+
         with term.location(floor(term.width/2 - 10), 1):
             print(term.green(progress.definite(20, len(apps.keys())/apps_num)), end='')
 
@@ -76,59 +80,65 @@ listener = kb.Listener(
     on_release=key_release)
 listener.start()
 
-with term.fullscreen(), term.hidden_cursor(), term.cbreak():
-    last_op = time.time()
-    while True:
-        delta = time.time() - last_op
+try:
+    with term.fullscreen(), term.hidden_cursor(), term.cbreak():
         last_op = time.time()
+        while True:
+            delta = time.time() - last_op
+            last_op = time.time()
 
-        for key in key_inputs:
-            key_inputs[key] += 1
+            for key in key_inputs:
+                key_inputs[key] += 1
 
-        if '*' in key_inputs:
-            if key_inputs['*'] == 1:
-                if time.time() - last_menu_keypress < 0.5:
-                    menu_keypresses += 1
+            if '*' in key_inputs:
+                if key_inputs['*'] == 1:
+                    if time.time() - last_menu_keypress < 0.5:
+                        menu_keypresses += 1
+                    else:
+                        menu_keypresses = 1
+                    last_menu_keypress = time.time()
+                    if menu_keypresses > 2:
+                        menu_keypresses = 0
+
+            render_str = ''
+
+            if hasattr(apps[current_app], 'update'):
+                if menu_keypresses < 2:
+                    render_str += apps[current_app].update(delta, key_inputs)
                 else:
-                    menu_keypresses = 1
-                last_menu_keypress = time.time()
-                if menu_keypresses > 2:
-                    menu_keypresses = 0
-
-        render_str = ''
-
-        if hasattr(apps[current_app], 'update'):
-            if menu_keypresses < 2:
-                render_str += apps[current_app].update(delta, key_inputs)
+                    render_str += apps[current_app].update(delta, {})
             else:
-                render_str += apps[current_app].update(delta, {})
-        else:
-            string = term.bold_red(f'This application ({current_app}) has no update sequence.')
-            string2 = f'If you\'re the developper of this app, open its Python file (apps/{current_app}.py) and add an update function.'
-            render_str += term.move_xy(floor(term.width/2 - term.length(string)/2), floor(term.height/2)) + string
-            render_str += term.move_xy(floor(term.width/2 - term.length(string2)/2), floor(term.height/2) + 1) + string2
+                string = term.bold_red(f'This application ({current_app}) has no update sequence.')
+                string2 = f'If you\'re the developper of this app, open its Python file (apps/{current_app}.py) and add an update function.'
+                render_str += term.move_xy(floor(term.width/2 - term.length(string)/2), floor(term.height/2)) + string
+                render_str += term.move_xy(floor(term.width/2 - term.length(string2)/2), floor(term.height/2) + 1) + string2
 
-            render_str += term.move_xy(floor(term.width/2 - 0.125*term.width), floor(term.height/2) + 3) + term.blue(progress.loader(floor(0.25*term.width)))
-        
-        if menu_keypresses == 2:
-            render_str += term.move_xy(0, term.height - 6) + term.on_blue(term.clear_eol + term.on_cyan('ticlock') + f' menu ・ (←/→) change application - (Enter) open application - (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS')
-            render_str += term.move_xy(0, term.height - 5) + term.on_gray(term.clear_eol + construct_applications_list(apps_list, current_app_id))
+                render_str += term.move_xy(floor(term.width/2 - 0.125*term.width), floor(term.height/2) + 3) + term.blue(progress.loader(floor(0.25*term.width)))
+            
+            if menu_keypresses == 2:
+                render_str += term.move_xy(0, term.height - 6) + term.on_blue(term.clear_eol + term.on_cyan('ticlock') + f' menu ・ (←/→) change application - (Enter) open application - (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS')
+                render_str += term.move_xy(0, term.height - 5) + term.on_gray(term.clear_eol + construct_applications_list(apps_list, current_app_id))
 
-            if kb.Key.left in key_inputs:
-                if (key_inputs[kb.Key.left]-1) % 30 == 0:
-                    current_app_id = max(current_app_id - 1, 0)
-            
-            if kb.Key.right in key_inputs:
-                if (key_inputs[kb.Key.right]-1) % 30 == 0:
-                    current_app_id = min(current_app_id + 1, len(apps_list) - 1)
-            
-            if kb.Key.enter in key_inputs:
-                if key_inputs[kb.Key.enter] == 1:
-                    current_app = apps_list[current_app_id]
-                    menu_keypresses = 0
-            
-            if 'r' in key_inputs:
-                if key_inputs['r'] == 1:
-                    reload_apps()
+                if kb.Key.left in key_inputs:
+                    if (key_inputs[kb.Key.left]-1) % 30 == 0:
+                        current_app_id = max(current_app_id - 1, 0)
+                
+                if kb.Key.right in key_inputs:
+                    if (key_inputs[kb.Key.right]-1) % 30 == 0:
+                        current_app_id = min(current_app_id + 1, len(apps_list) - 1)
+                
+                if kb.Key.enter in key_inputs:
+                    if key_inputs[kb.Key.enter] == 1:
+                        current_app = apps_list[current_app_id]
+                        menu_keypresses = 0
+                
+                if 'r' in key_inputs:
+                    if key_inputs['r'] == 1:
+                        reload_apps()
 
-        print(term.home+term.clear+render_str, end='')
+            print(term.home+term.clear+render_str, end='')
+except KeyboardInterrupt:
+    print(term.green('ticlock closed.'))
+    print('here\'s what went on in the main log stream:')
+    print(main_log_stream.brief())
+    exit()
