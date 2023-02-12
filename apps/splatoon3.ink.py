@@ -49,7 +49,7 @@ def update(dt, frame, keys):
             fest_map = maps['festSchedules']['nodes'][i]
             if i == 1:
                 next_rotation_time = datetime.datetime.strptime(fest_map['startTime'], '%Y-%m-%dT%H:%M:%SZ').astimezone(datetime.timezone.utc)
-                delta_time = next_rotation_time - datetime.datetime.now().astimezone(datetime.timezone.utc)
+                delta_time = datetime.timedelta(next_rotation_time - datetime.datetime.now().astimezone(datetime.timezone.utc))
             if fest_map['festMatchSetting']:
                 render_str += term.move_xy(panel_x[1], 4 + i) + term.bold(term.green('Now') if i == 0 else term.orange('Next') if i <= 1 else f'+{i}') + f' {fest_map["festMatchSetting"]["vsStages"][0]["name"]}/{fest_map["festMatchSetting"]["vsStages"][1]["name"]}'
         render_str += term.move_xy(panel_x[1], 3 + len(maps['festSchedules']['nodes'])) + 'Next rotation in ' + term.bold(str(delta_time))
