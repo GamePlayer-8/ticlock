@@ -90,9 +90,9 @@ convert_state("""
 """),
 ]
 
-def update(dt, keys):
+def update(dt, frame, keys):
     global displays_x
-    string = ''
+    render_str = ''
 
     now = datetime.datetime.now()
     sec_time = time.time()
@@ -111,7 +111,7 @@ def update(dt, keys):
         num_digit = int(digit)
 
         display.state = states[num_digit]
-        string += display.render(x + i * size * 4 + off_x * 4, y, size=size)
+        render_str += display.render(x + i * size * 4 + off_x * 4, y, size=size)
         if i%2 == 1:
             off_x += 1
         else:
@@ -122,14 +122,14 @@ def update(dt, keys):
 
     if sec_time % blink_interval < blink_length:
         for i in range(2):
-            string += term.move_xy(x + ((size + 2)*4 + 4)*(i+1) + (4 if i == 1 else 0), y + 2) + term.on_white('  ')
-            string += term.move_xy(x + ((size + 2)*4 + 4)*(i+1) + (4 if i == 1 else 0), y + 6) + term.on_white('  ')
+            render_str += term.move_xy(x + ((size + 2)*4 + 4)*(i+1) + (4 if i == 1 else 0), y + 2) + term.on_white('  ')
+            render_str += term.move_xy(x + ((size + 2)*4 + 4)*(i+1) + (4 if i == 1 else 0), y + 6) + term.on_white('  ')
 
-    string += term.move_xy(displays_x[0], y - 2) + term.red(progress.definite(2*(4 + size * 2) + 2, now.hour/24))
-    string += term.move_xy(displays_x[1], y - 2) + term.orange(progress.definite(2*(4 + size * 2) + 2, now.minute/60))
-    string += term.move_xy(displays_x[2], y - 2) + term.cyan(progress.definite(2*(4 + size * 2) + 2, now.second/60))
-    string += term.move_xy(displays_x[2], y - 3) + term.blue(progress.definite(2*(4 + size * 2) + 2, sec_time%1))
+    render_str += term.move_xy(displays_x[0], y - 2) + term.red(progress.definite(2*(4 + size * 2) + 2, now.hour/24))
+    render_str += term.move_xy(displays_x[1], y - 2) + term.orange(progress.definite(2*(4 + size * 2) + 2, now.minute/60))
+    render_str += term.move_xy(displays_x[2], y - 2) + term.cyan(progress.definite(2*(4 + size * 2) + 2, now.second/60))
+    render_str += term.move_xy(displays_x[2], y - 3) + term.blue(progress.definite(2*(4 + size * 2) + 2, sec_time%1))
     
-    string += term.move_xy(x, y + 10) + f'{now.day}/{now.month}/{now.year}'
+    render_str += term.move_xy(x, y + 10) + f'{now.day}/{now.month}/{now.year}'
 
-    return string
+    return render_str

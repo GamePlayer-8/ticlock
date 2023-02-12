@@ -10,6 +10,7 @@ main_log_stream = Logger('ticlock-main')
 
 apps = {}
 current_app = 'clock'
+app_frame_number = 0
 
 menu_keypresses = 0
 last_menu_keypress = time.time()
@@ -104,9 +105,9 @@ try:
 
             if hasattr(apps[current_app], 'update'):
                 if menu_keypresses < 2:
-                    render_str += apps[current_app].update(delta, key_inputs)
+                    render_str += apps[current_app].update(delta, app_frame_number, key_inputs)
                 else:
-                    render_str += apps[current_app].update(delta, {})
+                    render_str += apps[current_app].update(delta, app_frame_number, {})
             else:
                 string = term.bold_red(f'This application ({current_app}) has no update sequence.')
                 string2 = f'If you\'re the developper of this app, open its Python file (apps/{current_app}.py) and add an update function.'
@@ -132,11 +133,14 @@ try:
                 if kb.Key.enter in key_inputs:
                     if key_inputs[kb.Key.enter] == 1:
                         current_app = apps_list[current_app_id]
+                        app_frame_number = -1
                         menu_keypresses = 0
                 
                 if 'r' in key_inputs:
                     if key_inputs['r'] == 1:
                         reload_apps()
+
+            app_frame_number += 1
 
             print(term.home+term.clear+render_str, end='')
 except KeyboardInterrupt:

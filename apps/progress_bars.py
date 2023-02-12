@@ -4,8 +4,7 @@ from time import time
 import modules.progress_bar as progress
 term = Terminal()
 
-def update(dt, keys):
-    global frame
+def update(dt, frame, keys):
     render_str = ''
 
     render_str += term.move_xy(5, 4) + term.bold('Definite progress bars')

@@ -16,7 +16,7 @@ def reload_maps():
 
 last_update = 0
 maps = {}
-def update(dt, keys):
+def update(dt, frame, keys):
     global maps, last_update
 
     render_str = ''
