@@ -12,7 +12,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers binutils
+apk add --no-cache py-pip linux-headers build-base
 
 # FIX CERTIFICATES
 for X in $(find /usr -name *.pem); do
