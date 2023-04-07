@@ -143,6 +143,9 @@ try:
             app_frame_number += 1
 
             print(term.home+term.clear+render_str, end='')
+            time.sleep(0.5) # WAIT BETWEEN SCREEN REFRESHES
+
+
 except KeyboardInterrupt:
     print(term.green('ticlock closed.'))
     print('here\'s what went on in the main log stream:')
