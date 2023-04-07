@@ -53,13 +53,8 @@ chmod +x ticlock
 
 apk add --no-cache appstream tar
 
-wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
-chmod +x toolkit.AppImage
-
 mkdir -p ticlock.AppDir/usr/bin
 cp ticlock ticlock.AppDir/usr/bin/
-
-cp docs/icon.png ticlock.AppDir/icon.png
 
 wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/x86_64/apk-tools-static-2.12.10-r1.apk -O installer.apk
 
@@ -68,7 +63,9 @@ tar -xzf /source/installer.apk
 cd /source
 
 rm -f installer.apk
-/sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base glibc busybox
+/sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox
+
+cp docs/icon.png ticlock.AppDir/icon.png
 
 echo '[Desktop Entry]' > ticlock.AppDir/ticlock
 echo 'Name=ticlock' >> ticlock.AppDir/ticlock
@@ -85,6 +82,9 @@ echo 'TICLOCK_EXEC="${TICLOCK_RUNPATH}"/usr/bin/ticlock' >> ticlock.AppDir/AppRu
 echo 'exec "${TICLOCK_EXEC}" $@' >> ticlock.AppDir/AppRun
 
 chmod +x ticlock.AppDir/AppRun
+
+wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
+chmod +x toolkit.AppImage
 
 ARCH=x86_64 ./toolkit.AppImage ticlock.AppDir/
 
