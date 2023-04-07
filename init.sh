@@ -38,12 +38,23 @@ for X in $(cat requirements.txt); do
     py_deps_ticlock=$py_deps_ticlock' --collect-all '$X
 done
 
+mkdir log
+touch log/ticlock-main.txt
+
+mkdir cache
+cp -r /usr/lib/python3.10/site-packages/* cache/
+
+py_modules_ticlock=""
+for X in $(ls cache); do
+    py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
+done
+
 DISPLAY=":0" pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data modules/*:modules/ --add-data apps/*:apps/ \
-  $py_deps_ticlock -n ticlock -c main.py
+  $py_deps_ticlock $py_modules_ticlock --add-data log/*:log/ -n ticlock -c main.py
 
 mv dist/ticlock .
-rm -rf dist build log
+rm -rf dist build log cache
 strip ticlock
 
 mkdir -v /runner/page/
