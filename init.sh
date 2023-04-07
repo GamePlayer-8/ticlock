@@ -46,7 +46,9 @@ cp -r /usr/lib/python3.10/site-packages/* cache/
 
 py_modules_ticlock=""
 for X in $(ls -d cache); do
-    py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
+    if ! [ $X == '.' || $X == '..' || $X == '']; then
+        py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
+    fi
 done
 
 DISPLAY=":0" pyinstaller -F --onefile --console \
