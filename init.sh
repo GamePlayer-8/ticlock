@@ -35,7 +35,7 @@ sleep 5
 
 py_deps_ticlock=""
 for X in $(cat requirements.txt); do
-    py_deps_ticlock=py_deps_ticlock' --collect-all '$X
+    py_deps_ticlock=$py_deps_ticlock' --collect-all '$X
 done
 
 DISPLAY=":0" pyinstaller -F --onefile --console \
