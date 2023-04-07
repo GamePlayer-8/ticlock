@@ -33,10 +33,18 @@ done
 Xvfb -ac :0 -screen 0 1280x1024x24 &
 sleep 5
 
-DISPLAY=":0" pyinstaller -D -F -n ticlock -c main.py
+py_deps_ticlock=""
+for X in $(cat requirements.txt); do
+    py_deps_ticlock=py_deps_ticlock' --collect-all '$X
+done
+
+DISPLAY=":0" pyinstaller -F --onefile --console \
+ --additional-hooks-dir=. --add-data modules/*:modules/ --add-data apps/*:apps/ \
+  $py_deps_ticlock -n ticlock -c main.py
 
 mv dist/ticlock .
-rm -rf dist build 
+rm -rf dist build log
+strip ticlock
 
 mkdir -v /runner/page/
 cp -rv /source/* /runner/page/
