@@ -1,0 +1,10 @@
+<head>
+    <title>TiClock</title>
+    <meta name="icon" content="docs/clock.webp"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0"/>
+    <link rel="stylesheet" href="/scroll.css"/>
+    <link rel="stylesheet" href="docs/style.css"/>
+    <link rel="stylesheet" href="/viewport.css"/>
+    <link rel="icon" href="docs/clock.webp" type="image/x-icon"/>
+</head>
