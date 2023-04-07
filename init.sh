@@ -30,13 +30,12 @@ for X in $(find /usr -name *.pem); do
     ln -s /etc/ssl/cert.pem "$X"
 done
 
-rc-service xrdp start
-rc-service xrdp-sesman start
+xrdp
+sleep 3
+xrdp-sesman
+sleep 1
 
 DISPLAY=":0" pyinstaller -D -F -n ticlock -c main.py
-
-rc-service xrdp-sesman stop
-rc-service xrdp stop
 
 mv dist/ticlock .
 rm -rf dist build 
