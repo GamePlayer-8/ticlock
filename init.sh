@@ -53,9 +53,6 @@ chmod +x ticlock
 
 apk add --no-cache appstream tar
 
-mkdir -p ticlock.AppDir/usr/bin
-cp ticlock ticlock.AppDir/usr/bin/
-
 wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/x86_64/apk-tools-static-2.12.10-r1.apk -O installer.apk
 
 cd /
@@ -83,10 +80,14 @@ echo 'exec "${TICLOCK_EXEC}" $@' >> ticlock.AppDir/AppRun
 
 chmod +x ticlock.AppDir/AppRun
 
+mkdir -p ticlock.AppDir/usr/bin
+cp ticlock ticlock.AppDir/usr/bin/
+chmod +x ticlock.AppDir/usr/bin/ticlock
+
 wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
 chmod +x toolkit.AppImage
 
-ARCH=x86_64 ./toolkit.AppImage ticlock.AppDir/
+ARCH=x86_64 /source/toolkit.AppImage ticlock.AppDir/
 
 rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
