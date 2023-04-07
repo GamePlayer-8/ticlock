@@ -12,7 +12,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base
+apk add --no-cache py-pip linux-headers build-base python3-dev
 
 # FIX CERTIFICATES
 for X in $(find /usr -name *.pem); do
@@ -31,6 +31,9 @@ for X in $(find /usr -name *.pem); do
 done
 
 pyinstaller -D -F -n ticlock -c main.py
+
+mv dist/ticlock .
+rm -rf dist
 
 mkdir -v /runner/page/
 cp -rv /source/* /runner/page/
