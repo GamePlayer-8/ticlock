@@ -5,6 +5,9 @@ import modules.progress_bar as progress
 import os, importlib, time, pynput.keyboard as kb
 from modules.log import Logger
 
+os.chdir(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
+pybin = sys.executable
+
 term = Terminal()
 main_log_stream = Logger('ticlock-main')
 
@@ -143,7 +146,7 @@ try:
             app_frame_number += 1
 
             print(term.home+term.clear+render_str, end='')
-            time.sleep(0.5) # WAIT BETWEEN SCREEN REFRESHES
+            time.sleep(0.005) # WAIT BETWEEN SCREEN REFRESHES
 
 
 except KeyboardInterrupt:
