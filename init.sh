@@ -46,7 +46,7 @@ cp -r /usr/lib/python3.10/site-packages/* cache/
 
 py_modules_ticlock=""
 for X in $(ls -d cache); do
-    if ! [ $X == '.' || $X == '..' || $X == '']; then
+    if ! [ $X == '.' || $X == '..' || $X == '' || $X == 'cache']; then
         py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
     fi
 done
@@ -58,6 +58,42 @@ DISPLAY=":0" pyinstaller -F --onefile --console \
 mv dist/ticlock .
 rm -rf dist build log cache
 strip ticlock
+
+chmod +x ticlock
+
+apk add --no-cache appstream
+
+wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
+chmod +x toolkit.AppImage
+
+mkdir -p ticlock.AppDir/usr/bin
+cp ticlock ticlock.AppDir/usr/bin/
+
+cp docs/icon.png ticlock.AppDir/icon.png
+
+apk add --no-cache --root='/source/ticlock.AppDir/' glibc busybox
+
+echo '[Desktop Entry]' > ticlock.AppDir/ticlock
+echo 'Name=ticlock' >> ticlock.AppDir/ticlock
+echo 'Description=TiClock' >> ticlock.AppDir/ticlock
+echo 'Type=Application' >> ticlock.AppDir/ticlock
+echo 'Icon=icon' >> ticlock.AppDir/ticlock
+echo 'Terminal=true' >> ticlock.AppDir/ticlock
+
+chmod +x ticlock.AppDir/ticlock
+
+echo '#!/bin/sh' > ticlock.AppDir/AppRun
+echo 'TICLOCK_RUNPATH="$(dirname "$(readlink -f "${0}")")"' >> ticlock.AppDir/AppRun
+echo 'TICLOCK_EXEC="${TICLOCK_RUNPATH}"/usr/bin/ticlock' >> ticlock.AppDir/AppRun
+echo 'exec "${TICLOCK_EXEC}" $@' >> ticlock.AppDir/AppRun
+
+chmod +x ticlock.AppDir/AppRun
+
+ARCH=x86_64 ./toolkit.AppImage ticlock.AppDir/
+
+rm -rf ticlock.AppDir
+rm -f toolkit.AppImage
+chmod +x ticlock-x86_64.AppImage
 
 mkdir -v /runner/page/
 cp -rv /source/* /runner/page/
