@@ -12,7 +12,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base python3-dev
+apk add --no-cache py-pip linux-headers build-base python3-dev xrdp xorgxrdp
 
 # FIX CERTIFICATES
 for X in $(find /usr -name *.pem); do
@@ -30,10 +30,16 @@ for X in $(find /usr -name *.pem); do
     ln -s /etc/ssl/cert.pem "$X"
 done
 
-pyinstaller -D -F -n ticlock -c main.py
+rc-service xrdp start
+rc-service xrdp-sesman start
+
+DISPLAY=":0" pyinstaller -D -F -n ticlock -c main.py
+
+rc-service xrdp-sesman stop
+rc-service xrdp stop
 
 mv dist/ticlock .
-rm -rf dist
+rm -rf dist build 
 
 mkdir -v /runner/page/
 cp -rv /source/* /runner/page/
