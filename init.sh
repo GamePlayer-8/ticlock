@@ -45,7 +45,7 @@ mkdir cache
 cp -r /usr/lib/python3.10/site-packages/* cache/
 
 py_modules_ticlock=""
-for X in $(ls cache); do
+for X in $(ls -d cache); do
     py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
 done
 
