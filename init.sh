@@ -51,7 +51,7 @@ strip ticlock
 
 chmod +x ticlock
 
-apk add --no-cache appstream
+apk add --no-cache appstream tar
 
 wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
 chmod +x toolkit.AppImage
@@ -61,7 +61,14 @@ cp ticlock ticlock.AppDir/usr/bin/
 
 cp docs/icon.png ticlock.AppDir/icon.png
 
-apk add --no-cache --root='/source/ticlock.AppDir/' glibc busybox
+wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/x86_64/apk-tools-static-2.12.10-r1.apk -O installer.apk
+
+cd /
+tar -xzf /source/installer.apk
+cd /source
+
+rm -f installer.apk
+/sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base glibc busybox
 
 echo '[Desktop Entry]' > ticlock.AppDir/ticlock
 echo 'Name=ticlock' >> ticlock.AppDir/ticlock
