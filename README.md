@@ -1,29 +1,39 @@
-# ticlock
+<p align="center">
+    <a href="https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock">
+        <img src="docs/clock.webp" width="200" alt="Logo.">
+    </a>
+</p>
+<p align="center">
+    <b>TiClock</b>
+    <hr/>
+</p>
 
- who needs a tidbyt when you have **ti**ny **clock**
+Who needs a `tidbyt` when you have **ti**ny **clock**?
+
+## Preview
+
+**TiClock** is presenting like so:
 
 ![ticlock with clock app open](https://github.com/Rexxt/ticlock/blob/main/docs/clock.png?raw=true)
 ![ticlock with clock app and menu open](https://github.com/Rexxt/ticlock/blob/main/docs/clockwithmenu.png?raw=true)
 
-## how use????
+## Usage
 
 ### prerequisites
 
-* Python 3
-* `blessed` installed using pip
-* `pynput` installed using pip
-* `requests` installed using pip
+#### From source
+1. Install `python3` & `python-pip` package
+2. Run `pip install -r requirements.txt` inside source directory.
+3. Run `python3 main.py`.
 
-if you have python installed, here's how to get started, making sure everything is set up properly:
+#### Executable
+1. Download [the executable file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock). Actually Linux is the only supported format.
+2. Run it with `./ticlock`.
 
-windows (pwsh 5):
+## License
 
-```pwsh
-pip install blessed; pip install pynput; pip install requests; py main.py
-```
+The project is based on **GNU GPL 3.0 License**.
 
-others:
-
-```sh
-pip install blessed && pip install pynput && pip install requests && python3 main.py
-```
+#### Contributors
+ - [Mizu](https://github.com/Rexxt) (creator);
+ - [Chimmie Firefly](https://forgejo.xaviama.dank-me.me/GamePlayer-8).
