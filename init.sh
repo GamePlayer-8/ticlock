@@ -12,7 +12,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base python3-dev xrdp xorgxrdp xorg-server
+apk add --no-cache py-pip linux-headers build-base python3-dev xvfb
 
 # FIX CERTIFICATES
 for X in $(find /usr -name *.pem); do
@@ -30,11 +30,7 @@ for X in $(find /usr -name *.pem); do
     ln -s /etc/ssl/cert.pem "$X"
 done
 
-xrdp
-sleep 3
-xrdp-sesman
-sleep 1
-X :0 &
+Xvfb -ac :0 -screen 0 1280x1024x24 &
 sleep 5
 
 DISPLAY=":0" pyinstaller -D -F -n ticlock -c main.py
