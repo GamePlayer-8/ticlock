@@ -41,22 +41,12 @@ done
 mkdir log
 touch log/ticlock-main.txt
 
-mkdir cache
-cp -r /usr/lib/python3.10/site-packages/* cache/
-
-py_modules_ticlock=""
-for X in $(ls -d cache); do
-    if ! [ $X == '.' || $X == '..' || $X == '' || $X == 'cache']; then
-        py_modules_ticlock=$py_modules_ticlock' --add-data cache/'$X'/*:'$X'/'
-    fi
-done
-
 DISPLAY=":0" pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data modules/*:modules/ --add-data apps/*:apps/ \
-  $py_deps_ticlock $py_modules_ticlock --add-data log/*:log/ -n ticlock -c main.py
+  $py_deps_ticlock --add-data log/*:log/ -n ticlock -c main.py
 
 mv dist/ticlock .
-rm -rf dist build log cache
+rm -rf dist build log
 strip ticlock
 
 chmod +x ticlock
