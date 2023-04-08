@@ -90,8 +90,8 @@ chmod +x ticlock.AppDir/ticlock.desktop
 echo '#!/bin/sh' > ticlock.AppDir/AppRun
 echo 'TICLOCK_RUNPATH="$(dirname "$(readlink -f "${0}")")"' >> ticlock.AppDir/AppRun
 echo 'TICLOCK_EXEC="${TICLOCK_RUNPATH}"/usr/bin/ticlock' >> ticlock.AppDir/AppRun
-echo 'export LD_LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib:"${TICLOCK_RUNPATH}"/lib64' >> ticlock.AppDir/AppRun
-echo 'exec "${TICLOCK_EXEC}" $@' >> ticlock.AppDir/AppRun
+echo 'LD_LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib/:"${TICLOCK_RUNPATH}"/lib64/' >> ticlock.AppDir/AppRun
+echo 'chroot "${TICLOCK_RUNPATH}" /usr/bin/ticlock $@' >> ticlock.AppDir/AppRun
 
 chmod +x ticlock.AppDir/AppRun
 
