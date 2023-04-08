@@ -27,8 +27,12 @@ Who needs a `tidbyt` when you have **ti**ny **clock**?
 3. Run `python3 main.py`.
 
 #### Executable
-1. Download [the executable file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock). Actually Linux is the only supported format.
+1. Download [the executable file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock). Requires `musl` to run & actually works only on Linux.
 2. Run it with `./ticlock`.
+
+#### AppImage
+1. Download [the AppImage file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock-x86_64.AppImage). Requires only `fuse` & `appstream` to run everywhere.
+2. Execute it with `./ticlock-x86_64.AppImage`.
 
 ## License
 
