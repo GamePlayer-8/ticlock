@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cp /etc/ssl/certs/ca-certificates.crt /
+
 apk add --no-cache markdown
 cd /source
 
@@ -12,13 +14,27 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base python3-dev xvfb
+apk add --no-cache py-pip linux-headers build-base python3-dev xvfb libc6-compat ca-certificates libstdc++ curl appstream tar fuse
+
+cp /ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+rm -f /etc/ssl/cert.pem
+ln -s /etc/ssl/certs/ca-certificates.crt /etc/ssl/cert.pem
 
 # FIX CERTIFICATES
 for X in $(find /usr -name *.pem); do
     rm -f "$X"
     ln -s /etc/ssl/cert.pem "$X"
 done
+
+GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
+GLIBC_VERSION=2.30-r0
+
+for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
+    do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk
+done
+
+apk add --allow-untrusted --no-cache -f /tmp/*.apk
+/usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
 
 pip install --upgrade wheel setuptools
 pip install -r requirements.txt
@@ -50,8 +66,6 @@ rm -rf dist build log
 strip ticlock
 
 chmod +x ticlock
-
-apk add --no-cache appstream tar
 
 wget https://dl-cdn.alpinelinux.org/alpine/latest-stable/main/x86_64/apk-tools-static-2.12.10-r1.apk -O installer.apk
 
@@ -87,7 +101,14 @@ chmod +x ticlock.AppDir/usr/bin/ticlock
 wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
 chmod +x toolkit.AppImage
 
-ARCH=x86_64 /source/toolkit.AppImage ticlock.AppDir/
+cd /opt/
+/source/toolkit.AppImage --appimage-extract
+mv /opt/squashfs-root /opt/appimagetool.AppDir
+ln -s /opt/appimagetool.AppDir/AppRun /usr/local/bin/appimagetool
+chmod +x /opt/appimagetool.AppDir/AppRun
+cd /source
+
+ARCH=x86_64 appimagetool ticlock.AppDir/
 
 rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
