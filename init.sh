@@ -74,22 +74,23 @@ tar -xzf /source/installer.apk
 cd /source
 
 rm -f installer.apk
-/sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox
+/sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox libc6-compat
 
 cp docs/icon.png ticlock.AppDir/icon.png
 
-echo '[Desktop Entry]' > ticlock.AppDir/ticlock
-echo 'Name=ticlock' >> ticlock.AppDir/ticlock
-echo 'Description=TiClock' >> ticlock.AppDir/ticlock
-echo 'Type=Application' >> ticlock.AppDir/ticlock
-echo 'Icon=icon' >> ticlock.AppDir/ticlock
-echo 'Terminal=true' >> ticlock.AppDir/ticlock
+echo '[Desktop Entry]' > ticlock.AppDir/ticlock.desktop
+echo 'Name=ticlock' >> ticlock.AppDir/ticlock.desktop
+echo 'Categories=Settings' >> ticlock.AppDir/ticlock.desktop
+echo 'Type=Application' >> ticlock.AppDir/ticlock.desktop
+echo 'Icon=icon' >> ticlock.AppDir/ticlock.desktop
+echo 'Terminal=true' >> ticlock.AppDir/ticlock.desktop
 
-chmod +x ticlock.AppDir/ticlock
+chmod +x ticlock.AppDir/ticlock.desktop
 
 echo '#!/bin/sh' > ticlock.AppDir/AppRun
 echo 'TICLOCK_RUNPATH="$(dirname "$(readlink -f "${0}")")"' >> ticlock.AppDir/AppRun
 echo 'TICLOCK_EXEC="${TICLOCK_RUNPATH}"/usr/bin/ticlock' >> ticlock.AppDir/AppRun
+echo 'LD_LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib' >> ticlock.AppDir/AppRun
 echo 'exec "${TICLOCK_EXEC}" $@' >> ticlock.AppDir/AppRun
 
 chmod +x ticlock.AppDir/AppRun
