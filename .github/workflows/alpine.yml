@@ -24,7 +24,7 @@ jobs:
           run: cd /source && sh init.sh
         
         - name: Collect Artifacts.
-          run: mkdir -p /artifacts/{AppImage,Binary} && cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && cp /runner/page/ticlock-glibc /artifacts/Binary/
+          run: mkdir -p /artifacts/{AppImage,Binary} && cp /runner/page/ticlock-86_64.AppImage /artifacts/AppImage/ && cp /runner/page/ticlock /artifacts/Binary/
 
         - name: Upload AppImage.
           uses: actions/upload-artifact@v2
