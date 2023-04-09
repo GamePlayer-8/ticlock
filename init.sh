@@ -14,7 +14,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base python3-dev xvfb libc6-compat ca-certificates libstdc++ curl appstream tar fuse
+apk add --no-cache py-pip linux-headers build-base python3-dev xvfb appstream tar
 
 cp /ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 rm -f /etc/ssl/cert.pem
@@ -25,16 +25,6 @@ for X in $(find /usr -name *.pem); do
     rm -f "$X"
     ln -s /etc/ssl/cert.pem "$X"
 done
-
-GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
-GLIBC_VERSION=2.30-r0
-
-for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
-    do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk
-done
-
-apk add --allow-untrusted --no-cache -f /tmp/*.apk
-/usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
 
 pip install --upgrade wheel setuptools
 pip install -r requirements.txt
@@ -57,6 +47,10 @@ done
 mkdir log
 touch log/ticlock-main.txt
 
+for X in $(find . -name '__pycache__'); do
+    rm -rf "$X"
+done
+
 DISPLAY=":0" pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data modules/*:modules/ --add-data apps/*:apps/ \
   $py_deps_ticlock --add-data log/*:log/ -n ticlock -c main.py
@@ -76,6 +70,8 @@ cd /source
 rm -f installer.apk
 /sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox libc6-compat
 
+rm -rf ticlock.AppDir/{etc,var,home,mnt,srv,proc,sys,boot,opt}
+
 cp docs/icon.png ticlock.AppDir/icon.png
 
 echo '[Desktop Entry]' > ticlock.AppDir/ticlock.desktop
@@ -84,14 +80,17 @@ echo 'Categories=Settings' >> ticlock.AppDir/ticlock.desktop
 echo 'Type=Application' >> ticlock.AppDir/ticlock.desktop
 echo 'Icon=icon' >> ticlock.AppDir/ticlock.desktop
 echo 'Terminal=true' >> ticlock.AppDir/ticlock.desktop
+echo 'Exec=/lib/ld-musl-x86_64.so.1 /usr/bin/ticlock' >> ticlock.AppDir/ticlock.desktop
 
 chmod +x ticlock.AppDir/ticlock.desktop
 
 echo '#!/bin/sh' > ticlock.AppDir/AppRun
 echo 'TICLOCK_RUNPATH="$(dirname "$(readlink -f "${0}")")"' >> ticlock.AppDir/AppRun
 echo 'TICLOCK_EXEC="${TICLOCK_RUNPATH}"/usr/bin/ticlock' >> ticlock.AppDir/AppRun
-echo 'LD_LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib/:"${TICLOCK_RUNPATH}"/lib64/' >> ticlock.AppDir/AppRun
-echo 'chroot "${TICLOCK_RUNPATH}" /usr/bin/ticlock $@' >> ticlock.AppDir/AppRun
+echo 'export LD_LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib:"${TICLOCK_RUNPATH}"/lib64:$LD_LIBRARY_PATH' >> ticlock.AppDir/AppRun
+echo 'export LIBRARY_PATH="${TICLOCK_RUNPATH}"/lib:"${TICLOCK_RUNPATH}"/lib64:"${TICLOCK_RUNPATH}"/usr/lib:"${TICLOCK_RUNPATH}"/usr/lib64:$LIBRARY_PATH' >> ticlock.AppDir/AppRun
+echo 'export PATH="${TICLOCK_RUNPATH}/usr/bin/:${TICLOCK_RUNPATH}/usr/sbin/:${TICLOCK_RUNPATH}/usr/games/:${TICLOCK_RUNPATH}/bin/:${TICLOCK_RUNPATH}/sbin/${PATH:+:$PATH}"' >> ticlock.AppDir/AppRun
+echo 'exec "${TICLOCK_RUNPATH}"/lib/ld-musl-x86_64.so.1 "${TICLOCK_EXEC}" "$@"' >> ticlock.AppDir/AppRun
 
 chmod +x ticlock.AppDir/AppRun
 
