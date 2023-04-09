@@ -1,8 +1,16 @@
-from blessed import Terminal
+"""
+GNU GPL 3.0
+Mizu /edits by Chimmie
+"""
+
+import os
 import sys
+import time
+import importlib
 from math import floor
+import pynput.keyboard as kb
+from blessed import Terminal
 import modules.progress_bar as progress
-import os, importlib, time, pynput.keyboard as kb
 from modules.log import Logger
 
 os.chdir(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
@@ -34,7 +42,7 @@ def key_release(key):
 if not os.path.exists('apps/clock.py'):
     print(term.bold_red('! Well that\'s awkward...'))
     print(
-        '''We couldn\'t find the clock app. 
+        '''We couldn\'t find the clock app.
         Try making a file called "clock.py" in the apps folder.'''
     )
 
@@ -113,15 +121,15 @@ try:
                 if menu_keypresses < 2:
                     render_str += \
                         apps[current_app].update(
-                            delta, 
-                            app_frame_number, 
+                            delta,
+                            app_frame_number,
                             key_inputs
                         )
                 else:
                     render_str += \
                     apps[current_app].update(
-                        delta, 
-                        app_frame_number, 
+                        delta,
+                        app_frame_number,
                         {}
                     )
             else:
@@ -129,41 +137,41 @@ try:
                     f'This application ({current_app}) has no update sequence.'
                 )
                 string2 = \
-                    f'''If you\'re the developper of this app, 
-                    open its Python file (apps/{current_app}.py) and 
+                    f'''If you\'re the developper of this app,
+                    open its Python file (apps/{current_app}.py) and
                     add an update function.'''
                 render_str += term.move_xy(
                     floor(
-                        term.width/2 - term.length(string)/2), 
+                        term.width/2 - term.length(string)/2),
                         floor(term.height/2)
                 ) + string
                 render_str += term.move_xy(
-                    floor(term.width/2 - term.length(string2)/2), 
+                    floor(term.width/2 - term.length(string2)/2),
                     floor(term.height/2) + 1
                 ) + string2
 
                 render_str += term.move_xy(
-                    floor(term.width/2 - 0.125*term.width), 
+                    floor(term.width/2 - 0.125*term.width),
                     floor(term.height/2) + 3) + term.blue(
                         progress.loader(floor(0.25*term.width)
                     )
                 )
-            
+
             menu_y = term.height - 4
 
             if menu_keypresses == 2:
                 render_str += term.move_xy(0, menu_y) + \
                     term.on_blue(
                         term.clear_eol + term.on_cyan('ticlock') + \
-                        f''' menu ・ (←/→) change application - 
-                        (Enter) open application - 
+                        f''' menu ・ (←/→) change application -
+                        (Enter) open application -
                         (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS'''
                     )
                 render_str += term.move_xy(0, menu_y + 1) + \
                     term.on_gray(
                         term.clear_eol + \
                         construct_applications_list(
-                            apps_list, 
+                            apps_list,
                             current_app_id
                         )
                     )
@@ -171,20 +179,20 @@ try:
                 if kb.Key.left in key_inputs:
                     if (key_inputs[kb.Key.left]-1) % 30 == 0:
                         current_app_id = max(current_app_id - 1, 0)
-                
+
                 if kb.Key.right in key_inputs:
                     if (key_inputs[kb.Key.right]-1) % 30 == 0:
                         current_app_id = min(
-                            current_app_id + 1, 
+                            current_app_id + 1,
                             len(apps_list) - 1
                         )
-                
+
                 if kb.Key.enter in key_inputs:
                     if key_inputs[kb.Key.enter] == 1:
                         current_app = apps_list[current_app_id]
                         app_frame_number = -1
                         menu_keypresses = 0
-                
+
                 if 'r' in key_inputs:
                     if key_inputs['r'] == 1:
                         reload_apps()
@@ -205,3 +213,4 @@ except Exception as e:
     print(main_log_stream.brief())
     current_app = 'clock'
     current_app_id = apps_list.index(current_app)
+
