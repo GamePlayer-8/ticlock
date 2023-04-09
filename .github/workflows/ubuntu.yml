@@ -16,7 +16,7 @@ jobs:
           run: sudo mkdir /source
 
         - name: Run Init.
-          run: sudo cd /source && sudo sh init_ubuntu.sh
+          run: cd /source && sudo sh init_ubuntu.sh
         
         - name: Collect Artifacts.
           run: sudo mkdir /artifacts && sudo cp /runner/page/{ticlock-glibc,ticlock-glibc-x86_64.AppImage} /artifacts/
