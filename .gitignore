@@ -159,3 +159,5 @@ index.html
 ticlock
 ticlock-x86_64.AppImage
 ticlock.AppDir/
+ticlock-glibc
+ticlock-glibc-x86_64.AppImage
