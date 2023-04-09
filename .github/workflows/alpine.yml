@@ -20,8 +20,14 @@ jobs:
         - name: Copy data.
           run: cp -r * /source/
 
-        - name: Patch apk.
-          run: sed -i 's/main/testing/g' /etc/apk/repositories
+        - name: Download tar.gz AppImage.
+          run: wget https://gameplayer.xaviama.dank-me.me/shared/appimagetool.tar.gz -O /opt/tool.tar.gz
+        
+        - name: Install tar.
+          run: apk add --no-cache tar
+        
+        - name: Extract tools.
+          run: cd /opt && tar -xvf tool.tar.gz && mv /opt/squashfs-root /opt/appimagetool.AppDir
 
         - name: Run Init.
           run: cd /source && sh init.sh
