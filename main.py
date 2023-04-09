@@ -1,5 +1,5 @@
 from blessed import Terminal
-from sys import exit
+import sys
 from math import floor
 import modules.progress_bar as progress
 import os, importlib, time, pynput.keyboard as kb
@@ -33,7 +33,10 @@ def key_release(key):
 
 if not os.path.exists('apps/clock.py'):
     print(term.bold_red('! Well that\'s awkward...'))
-    print('We couldn\'t find the clock app. Try making a file called "clock.py" in the apps folder.')
+    print(
+        '''We couldn\'t find the clock app. 
+        Try making a file called "clock.py" in the apps folder.'''
+    )
 
 def find_app_number():
     num = 0
@@ -108,22 +111,62 @@ try:
 
             if hasattr(apps[current_app], 'update'):
                 if menu_keypresses < 2:
-                    render_str += apps[current_app].update(delta, app_frame_number, key_inputs)
+                    render_str += \
+                        apps[current_app].update(
+                            delta, 
+                            app_frame_number, 
+                            key_inputs
+                        )
                 else:
-                    render_str += apps[current_app].update(delta, app_frame_number, {})
+                    render_str += \
+                    apps[current_app].update(
+                        delta, 
+                        app_frame_number, 
+                        {}
+                    )
             else:
-                string = term.bold_red(f'This application ({current_app}) has no update sequence.')
-                string2 = f'If you\'re the developper of this app, open its Python file (apps/{current_app}.py) and add an update function.'
-                render_str += term.move_xy(floor(term.width/2 - term.length(string)/2), floor(term.height/2)) + string
-                render_str += term.move_xy(floor(term.width/2 - term.length(string2)/2), floor(term.height/2) + 1) + string2
+                string = term.bold_red(
+                    f'This application ({current_app}) has no update sequence.'
+                )
+                string2 = \
+                    f'''If you\'re the developper of this app, 
+                    open its Python file (apps/{current_app}.py) and 
+                    add an update function.'''
+                render_str += term.move_xy(
+                    floor(
+                        term.width/2 - term.length(string)/2), 
+                        floor(term.height/2)
+                ) + string
+                render_str += term.move_xy(
+                    floor(term.width/2 - term.length(string2)/2), 
+                    floor(term.height/2) + 1
+                ) + string2
 
-                render_str += term.move_xy(floor(term.width/2 - 0.125*term.width), floor(term.height/2) + 3) + term.blue(progress.loader(floor(0.25*term.width)))
+                render_str += term.move_xy(
+                    floor(term.width/2 - 0.125*term.width), 
+                    floor(term.height/2) + 3) + term.blue(
+                        progress.loader(floor(0.25*term.width)
+                    )
+                )
             
             menu_y = term.height - 4
 
             if menu_keypresses == 2:
-                render_str += term.move_xy(0, menu_y) + term.on_blue(term.clear_eol + term.on_cyan('ticlock') + f' menu ・ (←/→) change application - (Enter) open application - (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS')
-                render_str += term.move_xy(0, menu_y + 1) + term.on_gray(term.clear_eol + construct_applications_list(apps_list, current_app_id))
+                render_str += term.move_xy(0, menu_y) + \
+                    term.on_blue(
+                        term.clear_eol + term.on_cyan('ticlock') + \
+                        f''' menu ・ (←/→) change application - 
+                        (Enter) open application - 
+                        (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS'''
+                    )
+                render_str += term.move_xy(0, menu_y + 1) + \
+                    term.on_gray(
+                        term.clear_eol + \
+                        construct_applications_list(
+                            apps_list, 
+                            current_app_id
+                        )
+                    )
 
                 if kb.Key.left in key_inputs:
                     if (key_inputs[kb.Key.left]-1) % 30 == 0:
@@ -131,7 +174,10 @@ try:
                 
                 if kb.Key.right in key_inputs:
                     if (key_inputs[kb.Key.right]-1) % 30 == 0:
-                        current_app_id = min(current_app_id + 1, len(apps_list) - 1)
+                        current_app_id = min(
+                            current_app_id + 1, 
+                            len(apps_list) - 1
+                        )
                 
                 if kb.Key.enter in key_inputs:
                     if key_inputs[kb.Key.enter] == 1:
