@@ -14,39 +14,48 @@ import modules.progress_bar as progress
 from modules.log import Logger
 
 os.chdir(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
-pybin = sys.executable
+PYBIN = sys.executable
 
-term = Terminal()
-main_log_stream = Logger('ticlock-main')
+TERM = Terminal()
+MAIN_LOG_STREAM = Logger('ticlock-main')
 
 apps = {}
-current_app = 'clock'
-app_frame_number = 0
+CURRENT_APP = 'clock'
+APP_FRAME_NUMBER = 0
 
-menu_keypresses = 0
-last_menu_keypress = time.time()
+MENU_KEYPRESSES = 0
+LAST_MENU_KEYPRESS = time.time()
 
-key_inputs = {}
-def key_press(key):
+KEY_INPUTS = {}
+def key_press(key_pressed):
+    """
+        AI:define_function # Needs work
+    """
     try:
-        key_inputs[key.char] = 0
+        KEY_INPUTS[key_pressed.char] = 0
     except AttributeError:
-        key_inputs[key] = 0
+        KEY_INPUTS[key_pressed] = 0
 
-def key_release(key):
+def key_release(key_pressed):
+    """
+        AI:define_function # Needs work
+    """
     try:
-        del key_inputs[key.char]
+        del KEY_INPUTS[key_pressed.char]
     except AttributeError:
-        del key_inputs[key]
+        del KEY_INPUTS[key_pressed]
 
 if not os.path.exists('apps/clock.py'):
-    print(term.bold_red('! Well that\'s awkward...'))
+    print(TERM.bold_red('! Well that\'s awkward...'))
     print(
         '''We couldn\'t find the clock app.
         Try making a file called "clock.py" in the apps folder.'''
     )
 
 def find_app_number():
+    """
+        AI:define_function # Needs work
+    """
     num = 0
     for file in os.listdir('apps'):
         if file.startswith('_') or not file.endswith('.py'):
@@ -54,8 +63,11 @@ def find_app_number():
         num += 1
     return num
 
+
 def reload_apps():
-    global apps_list, current_app_id
+    """
+        AI:define_function # Needs work
+    """
     apps_num = find_app_number()
     for file in os.listdir('apps'):
         if file.startswith('_') or not file.endswith('.py'):
@@ -67,25 +79,30 @@ def reload_apps():
         spec.loader.exec_module(module)
         apps[mod_name] = module
 
-        main_log_stream.log(f'Loaded application {mod_name}.')
+        MAIN_LOG_STREAM.log(f'Loaded application {mod_name}.')
 
-        with term.location(floor(term.width/2 - 10), 1):
-            print(term.green(progress.definite(20, len(apps.keys())/apps_num)), end='')
+        with TERM.location(floor(TERM.width/2 - 10), 1):
+            print(TERM.green(progress.definite(20, len(apps.keys())/apps_num)), end='')
 
-    apps_list = list(apps.keys())
-    current_app_id = apps_list.index(current_app)
+    return list(apps.keys())
+
+APPS_LIST = reload_apps()
+CURRENT_APP_ID = APPS_LIST.index(CURRENT_APP)
 
 reload_apps()
 
-def construct_applications_list(apps_list, id):
+def construct_applications_list(apps_list_arg, app_id):
+    """
+        AI:define_function # Needs work
+    """
     app_str = ''
-    for i in range(id, len(apps_list)):
-        app = apps_list[i]
-        if term.length(app_str + app) > term.width:
+    for i in range(app_id, len(apps_list_arg)):
+        app = apps_list_arg[i]
+        if TERM.length(app_str + app) > TERM.width:
             break
-        ending_character = ' ' if i <= len(apps_list) - 1 else ''
-        if id == i:
-            app_str += term.on_orange(app) + ending_character
+        ending_character = ' ' if i <= len(apps_list_arg) - 1 else ''
+        if app_id == i:
+            app_str += TERM.on_orange(app) + ending_character
         else:
             app_str += app + ending_character
     return app_str
@@ -96,121 +113,121 @@ listener = kb.Listener(
 listener.start()
 
 try:
-    with term.fullscreen(), term.hidden_cursor(), term.cbreak():
+    with TERM.fullscreen(), TERM.hidden_cursor(), TERM.cbreak():
         last_op = time.time()
         while True:
             delta = time.time() - last_op
             last_op = time.time()
 
-            for key in key_inputs:
-                key_inputs[key] += 1
+            for key in KEY_INPUTS:
+                KEY_INPUTS[key] += 1
 
-            if '*' in key_inputs:
-                if key_inputs['*'] == 1:
-                    if time.time() - last_menu_keypress < 0.5:
-                        menu_keypresses += 1
+            if '*' in KEY_INPUTS:
+                if KEY_INPUTS['*'] == 1:
+                    if time.time() - LAST_MENU_KEYPRESS < 0.5:
+                        MENU_KEYPRESSES += 1
                     else:
-                        menu_keypresses = 1
-                    last_menu_keypress = time.time()
-                    if menu_keypresses > 2:
-                        menu_keypresses = 0
+                        MENU_KEYPRESSES = 1
+                    LAST_MENU_KEYPRESS = time.time()
+                    if MENU_KEYPRESSES > 2:
+                        MENU_KEYPRESSES = 0
 
-            render_str = ''
+            RENDER_STRING = ''
 
-            if hasattr(apps[current_app], 'update'):
-                if menu_keypresses < 2:
-                    render_str += \
-                        apps[current_app].update(
+            if hasattr(apps[CURRENT_APP], 'update'):
+                if MENU_KEYPRESSES < 2:
+                    RENDER_STRING += \
+                        apps[CURRENT_APP].update(
                             delta,
-                            app_frame_number,
-                            key_inputs
+                            APP_FRAME_NUMBER,
+                            KEY_INPUTS
                         )
                 else:
-                    render_str += \
-                    apps[current_app].update(
+                    RENDER_STRING += \
+                    apps[CURRENT_APP].update(
                         delta,
-                        app_frame_number,
+                        APP_FRAME_NUMBER,
                         {}
                     )
             else:
-                string = term.bold_red(
-                    f'This application ({current_app}) has no update sequence.'
+                string = TERM.bold_red(
+                    f'This application ({CURRENT_APP}) has no update sequence.'
                 )
                 string2 = \
                     f'''If you\'re the developper of this app,
-                    open its Python file (apps/{current_app}.py) and
+                    open its Python file (apps/{CURRENT_APP}.py) and
                     add an update function.'''
-                render_str += term.move_xy(
+                RENDER_STRING += TERM.move_xy(
                     floor(
-                        term.width/2 - term.length(string)/2),
-                        floor(term.height/2)
+                        TERM.width/2 - TERM.length(string)/2),
+                        floor(TERM.height/2)
                 ) + string
-                render_str += term.move_xy(
-                    floor(term.width/2 - term.length(string2)/2),
-                    floor(term.height/2) + 1
+                RENDER_STRING += TERM.move_xy(
+                    floor(TERM.width/2 - TERM.length(string2)/2),
+                    floor(TERM.height/2) + 1
                 ) + string2
 
-                render_str += term.move_xy(
-                    floor(term.width/2 - 0.125*term.width),
-                    floor(term.height/2) + 3) + term.blue(
-                        progress.loader(floor(0.25*term.width)
+                RENDER_STRING += TERM.move_xy(
+                    floor(TERM.width/2 - 0.125*TERM.width),
+                    floor(TERM.height/2) + 3) + TERM.blue(
+                        progress.loader(floor(0.25*TERM.width)
                     )
                 )
 
-            menu_y = term.height - 4
+            menu_y = TERM.height - 4
 
-            if menu_keypresses == 2:
-                render_str += term.move_xy(0, menu_y) + \
-                    term.on_blue(
-                        term.clear_eol + term.on_cyan('ticlock') + \
+            if MENU_KEYPRESSES == 2:
+                RENDER_STRING += TERM.move_xy(0, menu_y) + \
+                    TERM.on_blue(
+                        TERM.clear_eol + TERM.on_cyan('ticlock') + \
                         f''' menu ・ (←/→) change application -
                         (Enter) open application -
                         (r) reload all applications ・ {(1/max(delta, 1e-10)):.2f}FPS'''
                     )
-                render_str += term.move_xy(0, menu_y + 1) + \
-                    term.on_gray(
-                        term.clear_eol + \
+                RENDER_STRING += TERM.move_xy(0, menu_y + 1) + \
+                    TERM.on_gray(
+                        TERM.clear_eol + \
                         construct_applications_list(
-                            apps_list,
-                            current_app_id
+                            APPS_LIST,
+                            CURRENT_APP_ID
                         )
                     )
 
-                if kb.Key.left in key_inputs:
-                    if (key_inputs[kb.Key.left]-1) % 30 == 0:
-                        current_app_id = max(current_app_id - 1, 0)
+                if kb.Key.left in KEY_INPUTS:
+                    if (KEY_INPUTS[kb.Key.left]-1) % 30 == 0:
+                        CURRENT_APP_ID = max(CURRENT_APP_ID - 1, 0)
 
-                if kb.Key.right in key_inputs:
-                    if (key_inputs[kb.Key.right]-1) % 30 == 0:
-                        current_app_id = min(
-                            current_app_id + 1,
-                            len(apps_list) - 1
+                if kb.Key.right in KEY_INPUTS:
+                    if (KEY_INPUTS[kb.Key.right]-1) % 30 == 0:
+                        CURRENT_APP_ID = min(
+                            CURRENT_APP_ID + 1,
+                            len(APPS_LIST) - 1
                         )
 
-                if kb.Key.enter in key_inputs:
-                    if key_inputs[kb.Key.enter] == 1:
-                        current_app = apps_list[current_app_id]
-                        app_frame_number = -1
-                        menu_keypresses = 0
+                if kb.Key.enter in KEY_INPUTS:
+                    if KEY_INPUTS[kb.Key.enter] == 1:
+                        CURRENT_APP = APPS_LIST[CURRENT_APP_ID]
+                        APP_FRAME_NUMBER = -1
+                        MENU_KEYPRESSES = 0
 
-                if 'r' in key_inputs:
-                    if key_inputs['r'] == 1:
+                if 'r' in KEY_INPUTS:
+                    if KEY_INPUTS['r'] == 1:
                         reload_apps()
 
-            app_frame_number += 1
+            APP_FRAME_NUMBER += 1
 
-            print(term.home+term.clear+render_str, end='')
-            time.sleep(0.008) # WAIT BETWEEN SCREEN REFRESHES
+            time.sleep(delta/1.5) # WAIT BETWEEN SCREEN REFRESHES
+            print(TERM.home+TERM.clear+RENDER_STRING, end='')
+            
 
 
 except KeyboardInterrupt:
-    print(term.green('ticlock closed.'))
+    print(TERM.green('ticlock closed.'))
     print('here\'s what went on in the main log stream:')
-    print(main_log_stream.brief())
-    exit()
-except Exception as e:
-    main_log_stream.error(f'Error in application {current_app}: {e}')
-    print(main_log_stream.brief())
-    current_app = 'clock'
-    current_app_id = apps_list.index(current_app)
-
+    print(MAIN_LOG_STREAM.brief())
+    sys.exit()
+except Exception as e: # pylint: disable=broad-except
+    MAIN_LOG_STREAM.error(f'Error in application {CURRENT_APP}: {e}')
+    print(MAIN_LOG_STREAM.brief())
+    CURRENT_APP = 'clock'
+    CURRENT_APP_ID = APPS_LIST.index(CURRENT_APP)
