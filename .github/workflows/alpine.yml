@@ -8,11 +8,9 @@ jobs:
   Musl-Build:
     runs-on: ubuntu-latest
 
+    container: alpine
+
     steps:
-        - uses: jirutka/setup-alpine@v1
-          with:
-            branch: v3.15
-        
         - name: ^ Checkout
           uses: actions/checkout@v2
         
