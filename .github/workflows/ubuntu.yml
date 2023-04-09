@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  GLibC-Build:
+    runs-on: ubuntu-latest
+    steps:
+        - name: ^ Checkout
+          uses: actions/checkout@v2
+        
+        - name: Run Init.
+          run: cd /source && sh init_ubuntu.sh
+        
+        - name: Collect Artifacts.
+          run: mkdir /artifacts && cp /runner/page/{ticlock-glibc,ticlock-glibc-x86_64.AppImage} /artifacts/
+
+        - name: Upload Artifacts.
+          uses: actions/upload-artifact@v2
+          with:
+            name: binaries
+            path: /artifacts
+
