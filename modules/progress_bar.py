@@ -1,16 +1,28 @@
+"""
+GNU GPL 3.0
+Mizu /edits by Chimmie
+"""
+
 from math import floor
 from time import time
 
-def definite(len, fill):
+def definite(length, fill):
+    """
+        AI:define_function # Needs work
+    """
+
     shadow = '░'
     full = '█'
 
-    fill_len = floor(len * fill)
-    shadow_len = len - fill_len
+    fill_len = floor(length * fill)
+    shadow_len = length - fill_len
 
     return full * fill_len + shadow * shadow_len
 
 def loader(length):
+    """
+        AI:define_function # Needs work
+    """
     shadow = '░'
     degrees = '▒▓█'
 
@@ -19,8 +31,8 @@ def loader(length):
     string = [shadow for i in range(length)]
 
     point = (time()%interval)/interval*length
-    for i in range(len(degrees)):
+    for i, rate in enumerate(degrees):
         displacement = floor(point - len(degrees) + 1 + i)
-        string[displacement] = degrees[i]
+        string[displacement] = rate
 
     return ''.join(string)
