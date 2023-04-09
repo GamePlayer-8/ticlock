@@ -15,6 +15,9 @@ jobs:
         - name: Create build dir.
           run: sudo mkdir /source
 
+        - name: Copy data.
+          run: sudo cp -r * /source/
+
         - name: Run Init.
           run: cd /source && sudo sh init_ubuntu.sh
         

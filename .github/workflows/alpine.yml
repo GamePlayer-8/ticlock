@@ -6,7 +6,7 @@ on:
 
 jobs:
   Musl-Build:
-    runs-on: alpine
+    runs-on: alpine-latest
 
     steps:
         - name: ^ Checkout
@@ -15,6 +15,9 @@ jobs:
         - name: Create build dir.
           run: sudo mkdir /source
         
+        - name: Copy data.
+          run: sudo cp -r * /source/
+
         - name: Run Init.
           run: cd /source && sudo sh init.sh
         
