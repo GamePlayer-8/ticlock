@@ -124,5 +124,5 @@ rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
 chmod +x ticlock-x86_64.AppImage
 
-mkdir -v /runner/page/
+mkdir -pv /runner/page/
 cp -rv /source/* /runner/page/
