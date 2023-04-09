@@ -2,8 +2,11 @@ from blessed import Terminal
 from sys import exit
 from math import floor
 import modules.progress_bar as progress
-import os, importlib, time, pynput.keyboard as kb
+import sys, os, importlib, time, pynput.keyboard as kb, config
 from modules.log import Logger
+
+os.chdir(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
+pybin = sys.executable
 
 term = Terminal()
 main_log_stream = Logger('ticlock-main')
@@ -143,6 +146,10 @@ try:
             app_frame_number += 1
 
             print(term.home+term.clear+render_str, end='')
+            if config.wait_before_refresh:
+                time.sleep(config.refresh_delay) # WAIT BETWEEN SCREEN REFRESHES
+
+
 except KeyboardInterrupt:
     print(term.green('ticlock closed.'))
     print('here\'s what went on in the main log stream:')
