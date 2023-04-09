@@ -153,3 +153,8 @@ cython_debug/
 
 # modules.log
 log/
+
+# Builder
+index.html
+ticlock
+ticlock-x86-64.AppImage
