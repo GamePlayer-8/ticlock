@@ -2,7 +2,7 @@ from blessed import Terminal
 from sys import exit
 from math import floor
 import modules.progress_bar as progress
-import os, importlib, time, pynput.keyboard as kb
+import sys, os, importlib, time, pynput.keyboard as kb, config
 from modules.log import Logger
 
 os.chdir(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
@@ -146,7 +146,8 @@ try:
             app_frame_number += 1
 
             print(term.home+term.clear+render_str, end='')
-            time.sleep(0.008) # WAIT BETWEEN SCREEN REFRESHES
+            if config.wait_before_refresh:
+                time.sleep(config.refresh_delay) # WAIT BETWEEN SCREEN REFRESHES
 
 
 except KeyboardInterrupt:
