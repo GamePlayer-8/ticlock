@@ -11,6 +11,9 @@ jobs:
         - name: ^ Checkout
           uses: actions/checkout@v2
         
+        - name: Create build dir.
+          run: mkdir /source
+
         - name: Run Init.
           run: cd /source && sh init_ubuntu.sh
         
