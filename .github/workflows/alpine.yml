@@ -6,7 +6,7 @@ on:
 
 jobs:
   Musl-Build:
-    runs-on: alpine-latest
+    runs-on: ubuntu-latest
 
     steps:
         - name: ^ Checkout
@@ -17,16 +17,22 @@ jobs:
         
         - name: Copy data.
           run: sudo cp -r * /source/
+        
+        - uses: jirutka/setup-alpine@v1
+          with:
+            branch: v3.15
 
         - name: Run Init.
           run: cd /source && sudo sh init.sh
         
         - name: Collect Artifacts.
-          run: sudo mkdir /artifacts && sudo cp /runner/page/{ticlock,ticlock-x86_64.AppImage} /artifacts/
+          run: sudo mkdir -p /artifacts/{AppImage,Binary} && sudo cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && sudo cp /runner/page/ticlock-glibc /artifacts/Binary/
 
         - name: Upload Artifacts.
           uses: actions/upload-artifact@v2
           with:
-            name: binaries
-            path: /artifacts
+            - name: AppImage
+              path: /artifacts/AppImage
+            - name: Binary
+              path: /artifacts/Binary
 

@@ -22,11 +22,14 @@ jobs:
           run: cd /source && sudo sh init_ubuntu.sh
         
         - name: Collect Artifacts.
-          run: sudo mkdir /artifacts && sudo cp /runner/page/{ticlock-glibc,ticlock-glibc-x86_64.AppImage} /artifacts/
+          run: sudo mkdir -p /artifacts/{AppImage,Binary} && sudo cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && sudo cp /runner/page/ticlock-glibc /artifacts/Binary/
 
         - name: Upload Artifacts.
           uses: actions/upload-artifact@v2
           with:
-            name: binaries
-            path: /artifacts
+            - name: AppImage
+              path: /artifacts/AppImage
+            - name: Binary
+              path: /artifacts/Binary
+
 
