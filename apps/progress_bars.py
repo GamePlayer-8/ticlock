@@ -1,10 +1,17 @@
-from blessed import Terminal
-from math import floor
+"""
+GNU GPL 3.0
+Mizu /edits by Chimmie
+"""
+
 from time import time
-import modules.progress_bar as progress
+from blessed import Terminal
+from modules import progress_bar as progress
 term = Terminal()
 
-def update(dt, frame, keys):
+def update(_dt, _frame, _keys): # PLEASE SPECIFY THE USAGE OF IT
+    """
+        AI:define_function # Needs work
+    """
     render_str = ''
 
     render_str += term.move_xy(5, 4) + term.bold('Definite progress bars')
