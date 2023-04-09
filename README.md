@@ -4,11 +4,11 @@
     </a>
 </p>
 <p align="center">
-    <b>TiClock</b>
+    <b>ticlock</b>
     <hr/>
 </p>
 
-Who needs a `tidbyt` when you have **ti**ny **clock**?
+who needs a `tidbyt` when you have **ti**ny **clock**?
 
 ## Preview
 
@@ -17,26 +17,26 @@ Who needs a `tidbyt` when you have **ti**ny **clock**?
 ![ticlock with clock app open](https://github.com/Rexxt/ticlock/blob/main/docs/clock.png?raw=true)
 ![ticlock with clock app and menu open](https://github.com/Rexxt/ticlock/blob/main/docs/clockwithmenu.png?raw=true)
 
-## Usage
+## how use?!?!
 
 ### prerequisites
 
-#### From source
-1. Install `python3` & `python-pip` package
-2. Run `pip install -r requirements.txt` inside source directory.
-3. Run `python3 main.py`.
+#### from source
+1. install `python3` & `python-pip` package
+2. run `pip install -r requirements.txt` inside source directory. (should install `blessed`, `pynput` and `requests`)
+3. run `python3 main.py`.
 
-#### Executable
-1. Download [the executable file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock). Requires `musl` to run & actually works only on Linux.
-2. Run it with `./ticlock`.
+#### executable
+1. download [the executable file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock). requires `musl` to run & currently works only on Linux.
+2. run it with `./ticlock`.
 
 #### AppImage
-1. Download [the AppImage file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock-x86_64.AppImage). Requires only `fuse` & `appstream` to run everywhere.
-2. Execute it with `./ticlock-x86_64.AppImage`.
+1. download [the AppImage file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock-x86_64.AppImage). Requires only `fuse` & `appstream` to run everywhere.
+2. execute it with `./ticlock-x86_64.AppImage`.
 
-## License
+## license
 
-The project is based on **GNU GPL 3.0 License**.
+the project is based on the **GNU GPL 3.0 License**.
 
 #### Contributors
  - [Mizu](https://github.com/Rexxt) (creator);
