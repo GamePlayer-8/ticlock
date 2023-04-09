@@ -15,16 +15,16 @@ jobs:
           uses: actions/checkout@v2
         
         - name: Create build dir.
-          run: sudo mkdir /source
+          run: mkdir /source
         
         - name: Copy data.
-          run: sudo cp -r * /source/
+          run: cp -r * /source/
 
         - name: Run Init.
-          run: cd /source && sudo sh init.sh
+          run: cd /source && sh init.sh
         
         - name: Collect Artifacts.
-          run: sudo mkdir -p /artifacts/{AppImage,Binary} && sudo cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && sudo cp /runner/page/ticlock-glibc /artifacts/Binary/
+          run: mkdir -p /artifacts/{AppImage,Binary} && cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && cp /runner/page/ticlock-glibc /artifacts/Binary/
 
         - name: Upload AppImage.
           uses: actions/upload-artifact@v2
