@@ -8,9 +8,9 @@ import sys
 import time
 import importlib
 from math import floor
-import config
 import pynput.keyboard as kb
 from blessed import Terminal
+import config
 import modules.progress_bar as progress
 from modules.log import Logger
 
@@ -216,9 +216,13 @@ try:
                         reload_apps()
 
             APP_FRAME_NUMBER += 1
-            print(term.home+term.clear+render_str, end='')
-            if config.wait_before_refresh:
-                time.sleep(config.refresh_delay) # WAIT BETWEEN SCREEN REFRESHES
+            print(RENDER_STRING)
+            
+            if config.WAIT_BEFORE_REFRESH:
+                time.sleep(delta/config.REFRESH_DELAY) # WAIT BETWEEN SCREEN REFRESHES
+            
+            print(TERM.home+TERM.clear, end='')
+           
 
 except KeyboardInterrupt:
     print(TERM.green('ticlock closed.'))
