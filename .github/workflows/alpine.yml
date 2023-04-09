@@ -7,6 +7,8 @@ on:
 jobs:
   Musl-Build:
     runs-on: alpine
+    options: --user root
+    
     steps:
         - name: ^ Checkout
           uses: actions/checkout@v2
