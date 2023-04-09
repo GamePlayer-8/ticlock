@@ -62,7 +62,7 @@ for X in $(find . -name '__pycache__'); do
 done
 
 DISPLAY=":0" pyinstaller -F --onefile --console \
- --additional-hooks-dir=. --add-data modules/*:modules/ --add-data apps/*:apps/ \
+ --additional-hooks-dir=. --add-data config.py:config.py --add-data modules/*:modules/ --add-data apps/*:apps/ \
   $py_deps_ticlock --add-data log/*:log/ -n ticlock -c main.py
 
 mv dist/ticlock .
