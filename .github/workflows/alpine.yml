@@ -6,22 +6,20 @@ on:
 
 jobs:
   Musl-Build:
-    container:
-      image: alpine
-      options: --user root
+    runs-on: alpine
 
     steps:
         - name: ^ Checkout
           uses: actions/checkout@v2
         
         - name: Create build dir.
-          run: mkdir /source
+          run: sudo mkdir /source
         
         - name: Run Init.
-          run: cd /source && sh init.sh
+          run: sudo cd /source && sudo sh init.sh
         
         - name: Collect Artifacts.
-          run: mkdir /artifacts && cp /runner/page/{ticlock,ticlock-x86_64.AppImage} /artifacts/
+          run: sudo mkdir /artifacts && sudo cp /runner/page/{ticlock,ticlock-x86_64.AppImage} /artifacts/
 
         - name: Upload Artifacts.
           uses: actions/upload-artifact@v2
