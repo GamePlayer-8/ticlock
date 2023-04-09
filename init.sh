@@ -14,7 +14,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apk add --no-cache py-pip linux-headers build-base python3-dev xvfb appstream tar
+apk add --no-cache py-pip linux-headers build-base python3-dev xvfb appstream tar libc6-compat
 
 cp /ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 rm -f /etc/ssl/cert.pem
@@ -25,6 +25,16 @@ for X in $(find /usr -name *.pem); do
     rm -f "$X"
     ln -s /etc/ssl/cert.pem "$X"
 done
+
+GLIBC_REPO=https://github.com/sgerrand/alpine-pkg-glibc
+GLIBC_VERSION=2.30-r0
+
+for pkg in glibc-${GLIBC_VERSION} glibc-bin-${GLIBC_VERSION}; \
+    do curl -sSL ${GLIBC_REPO}/releases/download/${GLIBC_VERSION}/${pkg}.apk -o /tmp/${pkg}.apk
+done
+
+apk add --allow-untrusted --no-cache -f /tmp/*.apk
+/usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib
 
 pip install --upgrade wheel setuptools
 pip install -r requirements.txt
