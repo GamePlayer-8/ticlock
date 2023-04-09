@@ -20,6 +20,9 @@ jobs:
         - name: Copy data.
           run: cp -r * /source/
 
+        - name: Patch apk.
+          run: sed -i 's/main/testing/g' /etc/apk/repositories
+
         - name: Run Init.
           run: cd /source && sh init.sh
         
