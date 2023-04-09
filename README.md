@@ -34,6 +34,9 @@ who needs a `tidbyt` when you have **ti**ny **clock**?
 1. download [the AppImage file](https://xaviama.dank-me.me/pages/GamePlayer-8/ticlock/ticlock-x86_64.AppImage). Requires only `fuse` & `appstream` to run everywhere.
 2. execute it with `./ticlock-x86_64.AppImage`.
 
+#### releases
+Go to [releases page](https://github.com/Rexxt/ticlock/releases) & pick a file suitable for you. `glibc` versions works with most distros.
+
 ## license
 
 the project is based on the **GNU GPL 3.0 License**.
