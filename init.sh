@@ -63,7 +63,7 @@ done
 
 DISPLAY=":0" pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data config.py:config.py --add-data modules/*:modules/ --add-data apps/*:apps/ \
-  $py_deps_ticlock --add-data log/*:log/ -n ticlock -c main.py
+  $py_deps_ticlock --add-data log/*:log/ -i docs/icon.png -n ticlock -c main.py
 
 mv dist/ticlock .
 rm -rf dist build log
