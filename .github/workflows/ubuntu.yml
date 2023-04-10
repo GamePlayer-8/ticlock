@@ -25,7 +25,7 @@ jobs:
           run: sudo mkdir -p /artifacts/{AppImage,Binary} && sudo cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && sudo cp /runner/page/ticlock-glibc /artifacts/Binary/
 
         - name: Generate SHA256 checksum for AppImage.
-          run: cd /artifacts/AppImage && sha256sum * > sha256sum.txt
+          run: cd /artifacts/AppImage && sudo sha256sum * > sha256sum.txt
 
         - name: Generate SHA256 checksum for Binary.
           run: cd /artifacts/Binary && sudo sha256sum * > sha256sum.txt
