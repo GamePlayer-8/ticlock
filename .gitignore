@@ -162,3 +162,4 @@ ticlock.AppDir/
 ticlock-glibc
 ticlock-glibc-x86_64.AppImage
 *.spec
+sha256sum.txt
