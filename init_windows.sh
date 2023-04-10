@@ -17,6 +17,7 @@ echo '</body>' >> index.html
 echo '</html>' >> index.html
 
 apt install --yes wine apt-utils tar
+dpkg --add-architecture i386 && apt-get update && apt-get install --yes wine32
 
 py_deps_ticlock=""
 for X in $(cat requirements.txt); do
