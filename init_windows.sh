@@ -55,7 +55,7 @@ wine $PYTHON_EXE_FILE -m Z:/python/Scripts/pip.exe install pyinstaller > /dev/nu
 
 cd /source
 
-wine $PYTHON_EXE_FILE -m z:/python/Scripts/pip.exe install -r requirements.txt > /dev/null
+wine $PYTHON_EXE_FILE -m Z:/python/Scripts/pip.exe install -r requirements.txt > /dev/null
 
 wine $PYTHON_EXE_FILE -m Z:/python/Scripts/pyinstaller.exe -F --onefile --console \
  --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
