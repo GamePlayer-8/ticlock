@@ -80,7 +80,9 @@ cd /source
 rm -f installer.apk
 /sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox libc6-compat
 
-rm -rf ticlock.AppDir/{etc,var,home,mnt,srv,proc,sys,boot,opt}
+cd ticlock.AppDir/
+rm -rf etc var home mnt srv proc sys boot opt
+cd ..
 
 cp docs/icon.png ticlock.AppDir/icon.png
 
@@ -124,7 +126,8 @@ rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
 chmod +x ticlock-x86_64.AppImage
 
-sha256sum {ticlock,ticlock-x86_64.AppImage} > sha256sum.txt
+sha256sum ticlock-glibc > sha256sum.txt
+sha256sum ticlock-glibc-x86_64.AppImage >> sha256sum.txt
 
 mkdir -pv /runner/page/
 cp -rv /source/* /runner/page/

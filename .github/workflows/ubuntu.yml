@@ -26,7 +26,7 @@ jobs:
           run: cd /source && sh init_ubuntu.sh
         
         - name: Collect Artifacts.
-          run: mkdir -p /artifacts/{AppImage,Binary} && cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && cp /runner/page/ticlock-glibc /artifacts/Binary/
+          run: mkdir -p /artifacts/AppImage && mkdir /artifacts/Binary && cp /runner/page/ticlock-glibc-x86_64.AppImage /artifacts/AppImage/ && cp /runner/page/ticlock-glibc /artifacts/Binary/
 
         - name: Generate SHA256 checksum for AppImage.
           run: cd /artifacts/AppImage && sha256sum * > sha256sum.txt

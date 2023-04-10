@@ -52,7 +52,9 @@ mkdir -p ticlock.AppDir/var/cache/apt/archives
 apt install --yes debootstrap fakeroot fakechroot
 fakechroot fakeroot debootstrap --variant=fakechroot --arch amd64 22.04 /source/ticlock.AppDir/ http://archive.ubuntu.com/ubuntu
 
-rm -rf ticlock.AppDir/{etc,var,home,mnt,srv,proc,sys,boot,opt}
+cd ticlock.AppDir/
+rm -rf etc var home mnt srv proc sys boot opt
+cd ..
 
 cp docs/icon.png ticlock.AppDir/icon.png
 
@@ -99,7 +101,8 @@ rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
 chmod +x ticlock-glibc-x86_64.AppImage
 
-sha256sum {ticlock-glibc,ticlock-glibc-x86_64.AppImage} > sha256sum.txt
+sha256sum ticlock-glibc > sha256sum.txt
+sha256sum ticlock-glibc-x86_64.AppImage >> sha256sum.txt
 
 mkdir -pv /runner/page/
 cp -rv /source/* /runner/page/
