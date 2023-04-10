@@ -82,7 +82,7 @@ mkdir -p ticlock.AppDir/usr/bin
 cp ticlock ticlock.AppDir/usr/bin/
 chmod +x ticlock.AppDir/usr/bin/ticlock
 
-wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage > /dev/null
+wget -q https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
 chmod +x toolkit.AppImage
 
 cd /opt/

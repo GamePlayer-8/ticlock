@@ -34,15 +34,15 @@ done
 export WINEPREFIX=/wine
 export DISPLAY=":0"
 
-wget https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /installer.exe
+wget -q https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /installer.exe
 
 chown -R $(whoami):$(whoami) /github
 
 Xvfb -ac :0 -screen 0 1280x1024x24 &
 sleep 5
 
-wine /installer.exe /quiet InstallAllUsers=1 SimpleInstall=1
-PYTHON_EXE_FILE=$(find /root -name python.exe | tail -n 1)
+wine /installer.exe /quiet
+PYTHON_EXE_FILE=$(find /wine -name python.exe | tail -n 1)
 wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
 wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
 wine $PYTHON_EXE_FILE -m pip install -r requirements.txt > /dev/null
