@@ -16,7 +16,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apt install --yes python3-pip linux-headers-5.19.0-38-generic build-essential python3-dev xvfb appstream tar lsb-release apt-utils
+apt install --yes python3-pip linux-headers-5.19.0-38-generic build-essential python3-dev xvfb appstream tar lsb-release apt-utils file
 
 pip install --upgrade wheel setuptools
 pip install -r requirements.txt
@@ -50,7 +50,7 @@ chmod +x ticlock
 mkdir -p ticlock.AppDir/var/lib/dpkg
 mkdir -p ticlock.AppDir/var/cache/apt/archives
 apt install --yes debootstrap fakeroot fakechroot
-fakechroot fakeroot debootstrap --variant=fakechroot --arch amd64 $(lsb-release -sr) /source/ticlock.AppDir/ http://archive.ubuntu.com/ubuntu
+fakechroot fakeroot debootstrap --variant=fakechroot --arch amd64 22.04 /source/ticlock.AppDir/ http://archive.ubuntu.com/ubuntu
 
 rm -rf ticlock.AppDir/{etc,var,home,mnt,srv,proc,sys,boot,opt}
 
