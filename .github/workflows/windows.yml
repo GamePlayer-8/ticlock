@@ -8,7 +8,9 @@ jobs:
   EXE-Build:
     runs-on: ubuntu-latest
 
-    container: ubuntu
+    container: 
+      image: ubuntu
+      options: --user root
 
     steps:
         - name: ^ Checkout
