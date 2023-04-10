@@ -3,7 +3,7 @@
 TZ="Europe/Warsaw"
 DEBIAN_FRONTEND=noninteractive
 
-apt update
+apt update > /dev/null
 apt install --yes markdown > /dev/null
 cd /source
 
@@ -34,10 +34,14 @@ done
 WINEPREFIX=/wine
 
 wget https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /installer.exe
+
+chown -R $(whoami):$(whoami) /github
+
 wine /installer.exe /quiet InstallAllUsers=1 SimpleInstall=1
 PYTHON_EXE_FILE=$(find /root -name python.exe | head -n 1)
-wine $PYTHON_EXE_FILE -m pip install pyinstaller
-wine $PYTHON_EXE_FILE -m pip install -r requirements.txt
+wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
+wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
+wine $PYTHON_EXE_FILE -m pip install -r requirements.txt > /dev/null
 
 wine $PYTHON_EXE_FILE -m pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \

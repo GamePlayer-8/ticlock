@@ -3,8 +3,8 @@
 TZ="Europe/Warsaw"
 DEBIAN_FRONTEND=noninteractive
 
-apt update
-apt install --yes markdown
+apt update > /dev/null
+apt install --yes markdown > /dev/null
 cd /source
 
 echo '<!DOCTYPE html>' > index.html
@@ -16,11 +16,11 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apt install --yes python3-pip linux-headers-5.19.0-38-generic build-essential python3-dev xvfb appstream tar lsb-release apt-utils file
+apt install --yes python3-pip linux-headers-5.19.0-38-generic build-essential python3-dev xvfb appstream tar lsb-release apt-utils file > /dev/null
 
-pip install --upgrade wheel setuptools
-pip install -r requirements.txt
-pip install pyinstaller
+pip install --upgrade wheel setuptools > /dev/null
+pip install -r requirements.txt > /dev/null
+pip install pyinstaller > /dev/null
 
 Xvfb -ac :0 -screen 0 1280x1024x24 &
 sleep 5
@@ -50,7 +50,7 @@ chmod +x ticlock
 mkdir -p ticlock.AppDir/var/lib/dpkg
 mkdir -p ticlock.AppDir/var/cache/apt/archives
 apt install --yes debootstrap fakeroot fakechroot
-fakechroot fakeroot debootstrap --variant=fakechroot --arch amd64 22.04 /source/ticlock.AppDir/ http://archive.ubuntu.com/ubuntu
+fakechroot fakeroot debootstrap --variant=fakechroot --arch amd64 22.04 /source/ticlock.AppDir/ http://archive.ubuntu.com/ubuntu > /dev/null
 
 cd ticlock.AppDir/
 rm -rf etc var home mnt srv proc sys boot opt
@@ -82,7 +82,7 @@ mkdir -p ticlock.AppDir/usr/bin
 cp ticlock ticlock.AppDir/usr/bin/
 chmod +x ticlock.AppDir/usr/bin/ticlock
 
-wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage
+wget https://github.com/AppImage/AppImageKit/releases/download/13/appimagetool-x86_64.AppImage -O toolkit.AppImage > /dev/null
 chmod +x toolkit.AppImage
 
 cd /opt/
