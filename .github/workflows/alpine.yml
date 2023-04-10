@@ -26,6 +26,12 @@ jobs:
         - name: Collect Artifacts.
           run: mkdir -p /artifacts/AppImage && mkdir /artifacts/Binary && cp /runner/page/ticlock-x86_64.AppImage /artifacts/AppImage/ticlock-x86_64.AppImage && cp /runner/page/ticlock /artifacts/Binary/ticlock
 
+        - name: Generate SHA256 checksum for AppImage.
+          run: cd /artifacts/AppImage && sha256sum * > sha256sum.txt
+
+        - name: Generate SHA256 checksum for Binary.
+          run: cd /artifacts/Binary && sha256sum * > sha256sum.txt
+
         - name: Upload AppImage.
           uses: actions/upload-artifact@v2
           with:

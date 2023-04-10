@@ -124,5 +124,7 @@ rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
 chmod +x ticlock-x86_64.AppImage
 
+sha256sum {ticlock,ticlock-x86_64.AppImage} > sha256sum.txt
+
 mkdir -pv /runner/page/
 cp -rv /source/* /runner/page/

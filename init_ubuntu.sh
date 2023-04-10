@@ -97,7 +97,9 @@ mv ticlock-x86_64.AppImage ticlock-glibc-x86_64.AppImage
 
 rm -rf ticlock.AppDir
 rm -f toolkit.AppImage
-chmod +x ticlock-x86_64.AppImage
+chmod +x ticlock-glibc-x86_64.AppImage
+
+sha256sum {ticlock-glibc,ticlock-glibc-x86_64.AppImage} > sha256sum.txt
 
 mkdir -pv /runner/page/
 cp -rv /source/* /runner/page/
