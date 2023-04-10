@@ -16,7 +16,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apt install --yes wine apt-utils tar wget xvfb > /dev/null
+apt install --yes wine apt-utils tar wget xvfb winetricks > /dev/null
 dpkg --add-architecture i386 && apt-get update > /dev/null && apt-get install --yes wine32 > /dev/null
 
 py_deps_ticlock=""
@@ -31,7 +31,8 @@ for X in $(find . -name '__pycache__'); do
     rm -rf "$X"
 done
 
-WINEPREFIX=/wine
+export WINEPREFIX=/wine
+export DISPLAY=":0"
 
 wget https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /installer.exe
 
