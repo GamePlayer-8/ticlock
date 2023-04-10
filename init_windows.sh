@@ -21,7 +21,7 @@ dpkg --add-architecture i386 && apt-get update > /dev/null && apt-get install --
 
 py_deps_ticlock=""
 for X in $(cat requirements.txt); do
-    py_deps_ticlock=$py_deps_ticlock' --collect-all '$X
+    py_deps_ticlock=$py_deps_ticlock' --collect-all "'$X'"'
 done
 
 mkdir log
@@ -47,17 +47,19 @@ wine reg add 'HKCU\Software\Wine\DllOverrides' /v mscoree /t REG_SZ /d '' /f && 
 wine reg add 'HKCU\Software\Wine\DllOverrides' /v mshtml /t REG_SZ /d '' /f; \
 wineserver -w"
 
-wget -q https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe{,.asc} -O /python-${PYTHON_VERSION}-amd64.exe
+wget -q https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe -O /python-${PYTHON_VERSION}-amd64.exe
 wget -q https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-win64.zip -O /upx-${UPX_VERSION}-win64.zip
 
 cd /
 
 xvfb-run sh -c "\
-    wine python-${PYTHON_VERSION}-amd64.exe /quiet TargetDir=C:\\Python310 \
+    wine /python-${PYTHON_VERSION}-amd64.exe /quiet TargetDir=C:\\Python310 \
       Include_doc=0 InstallAllUsers=1 PrependPath=1; \
     wineserver -w" && \
   unzip upx*.zip && \
   mv -v upx*/upx.exe ${WINEPREFIX}/drive_c/windows/
+
+export WINEPATH='C:\Python310\Scripts'
 
 wine python -m pip install --upgrade setuptools wheel pip
 wine python -m pip install pyinstaller
@@ -66,9 +68,10 @@ cd /source
 
 wine python -m pip install -r requirements.txt
 
-wine python -m pyinstaller -F --onefile --console \
- --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
-  $py_deps_ticlock --add-data ./log/*;log/ -i ./docs/icon.png -n ticlock -c main.py
+wine pyinstaller $py_deps_ticlock --add-data 'log/*;log/' --add-data 'config.py;config.py' --add-data 'modules/*;modules/' --add-data 'apps/*;apps/' \
+  -F --onefile --console \
+  --additional-hooks-dir=. \
+  -i 'docs/icon.ico' -n ticlock -c main.py
 
 mv dist/ticlock.exe .
 rm -rf dist build log
