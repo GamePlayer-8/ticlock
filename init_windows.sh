@@ -50,14 +50,17 @@ PYTHON_EXE_FILE=/python/python.exe
 wget -q https://bootstrap.pypa.io/get-pip.py -O /get-pip.py
 
 wine $PYTHON_EXE_FILE /get-pip.py
-wine $PYTHON_EXE_FILE -m /python/Scripts/pip.exe install --upgrade setuptools wheel > /dev/null
-wine $PYTHON_EXE_FILE -m /python/Scripts/pip.exe install pyinstaller > /dev/null
+
+export WINEPATH='Z:\python\Scripts'
+
+wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
+wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
 
 cd /source
 
-wine $PYTHON_EXE_FILE -m /python/Scripts/pip.exe install -r requirements.txt > /dev/null
+wine $PYTHON_EXE_FILE -m pip install -r requirements.txt > /dev/null
 
-wine $PYTHON_EXE_FILE -m /python/Scripts/pyinstaller.exe -F --onefile --console \
+wine $PYTHON_EXE_FILE -m pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
   $py_deps_ticlock --add-data ./log/*;log/ -i ./docs/icon.png -n ticlock -c main.py
 
