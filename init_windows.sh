@@ -34,8 +34,8 @@ git clone https://github.com/kicsikrumpli/wine-pyinstaller /wine
 podman build -t wine/pyinstaller /wine
 
 podman run -it -v $(pwd):/src kicsikrumpli/wine-pyinstaller -F --onefile --console \
- --additional-hooks-dir=. --add-data config.py:config.py --add-data modules/*:modules/ --add-data apps/*:apps/ \
-  $py_deps_ticlock --add-data log/*:log/ -i docs/icon.png -n ticlock -c main.py
+ --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
+  $py_deps_ticlock --add-data ./log/*;log/ -i ./docs/icon.png -n ticlock -c main.py
 
 
 
