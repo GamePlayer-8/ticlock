@@ -33,36 +33,40 @@ done
 
 export WINEPREFIX=/wine
 export DISPLAY=":0"
-
-wget -q https://www.python.org/ftp/python/3.10.11/python-3.10.11-embed-amd64.zip -O /installer.zip
-
-chown -R $(whoami):$(whoami) /github
+export WINEDEBUG="-all"
+export PYTHON_VERSION=3.11.3
+export UPX_VERSION=3.96
+export WINEDLLOVERRIDES="winemenubuilder.exe,mscoree,mshtml="
 
 Xvfb -ac :0 -screen 0 1280x1024x24 &
 sleep 5
 
-mkdir /python
-cd /python
-unzip /installer.zip
+xvfb-run wine reg add 'HKLM\Software\Microsoft\Windows NT\CurrentVersion' /v CurrentVersion /d 10.0 /f
+xvfb-run wine reg add 'HKCU\Software\Wine\DllOverrides' /v winemenubuilder.exe /t REG_SZ /d '' /f
+xvfb-run wine reg add 'HKCU\Software\Wine\DllOverrides' /v mscoree /t REG_SZ /d '' /f
+xvfb-run wine reg add 'HKCU\Software\Wine\DllOverrides' /v mshtml /t REG_SZ /d '' /f
+xvfb-run wineserver -w
 
-PYTHON_EXE_FILE=/python/python.exe
+wget -q https://www.python.org/ftp/python/${PYTHON_VERSION}/python-${PYTHON_VERSION}-amd64.exe{,.asc} -O /python-${PYTHON_VERSION}-amd64.exe
+wget -q https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-win64.zip -O /upx-${UPX_VERSION}-win64.zip
 
-wget -q https://bootstrap.pypa.io/get-pip.py -O /get-pip.py
+cd /
 
-wine $PYTHON_EXE_FILE /get-pip.py
+xvfb-run sh -c "\
+    wine python-${PYTHON_VERSION}-amd64.exe /quiet TargetDir=C:\\Python310 \
+      Include_doc=0 InstallAllUsers=1 PrependPath=1; \
+    wineserver -w" && \
+  unzip upx*.zip && \
+  mv -v upx*/upx.exe ${WINEPREFIX}/drive_c/windows/
 
-export WINEPATH=$(winepath -w /python/Scripts)\;$(winepath -w /python)
-
-wine $PYTHON_EXE_FILE -m ensurepip
-
-wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
-wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
+wine python -m pip install --upgrade setuptools wheel pip > /dev/null
+wine python -m pip install pyinstaller > /dev/null
 
 cd /source
 
-wine $PYTHON_EXE_FILE -m pip install -r requirements.txt > /dev/null
+wine python -m pip install -r requirements.txt > /dev/null
 
-wine $PYTHON_EXE_FILE -m pyinstaller -F --onefile --console \
+wine python -m pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
   $py_deps_ticlock --add-data ./log/*;log/ -i ./docs/icon.png -n ticlock -c main.py
 
