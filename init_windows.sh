@@ -51,7 +51,7 @@ wget -q https://bootstrap.pypa.io/get-pip.py -O /get-pip.py
 
 wine $PYTHON_EXE_FILE /get-pip.py
 
-export WINEPATH='Z:\python\Scripts'
+export WINEPATH=$(winepath -w /python/Scripts)\;$(winepath -w /python)
 
 wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
 wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
