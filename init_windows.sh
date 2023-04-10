@@ -16,7 +16,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apt install --yes wine apt-utils tar wget > /dev/null
+apt install --yes wine apt-utils tar wget xvfb > /dev/null
 dpkg --add-architecture i386 && apt-get update > /dev/null && apt-get install --yes wine32 > /dev/null
 
 py_deps_ticlock=""
@@ -37,8 +37,11 @@ wget https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /inst
 
 chown -R $(whoami):$(whoami) /github
 
+Xvfb -ac :0 -screen 0 1280x1024x24 &
+sleep 5
+
 wine /installer.exe /quiet InstallAllUsers=1 SimpleInstall=1
-PYTHON_EXE_FILE=$(find /root -name python.exe | head -n 1)
+PYTHON_EXE_FILE=$(find /root -name python.exe | tail -n 1)
 wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
 wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
 wine $PYTHON_EXE_FILE -m pip install -r requirements.txt > /dev/null
