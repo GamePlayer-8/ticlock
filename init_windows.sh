@@ -16,7 +16,7 @@ markdown README.md >> index.html
 echo '</body>' >> index.html
 echo '</html>' >> index.html
 
-apt install --yes podman apt-utils git
+apt install --yes wine apt-utils tar
 
 py_deps_ticlock=""
 for X in $(cat requirements.txt); do
@@ -30,10 +30,13 @@ for X in $(find . -name '__pycache__'); do
     rm -rf "$X"
 done
 
-git clone https://github.com/kicsikrumpli/wine-pyinstaller /wine
-podman build -t wine/pyinstaller /wine
+wget https://www.python.org/ftp/python/3.10.11/python-3.10.11-amd64.exe -O /installer.exe
+wine /installer.exe /quiet InstallAllUsers=1 SimpleInstall=1
+PYTHON_EXE_FILE=$(find /root -name python.exe | head -n 1)
+wine $PYTHON_EXE_FILE -m pip install pyinstaller
+wine $PYTHON_EXE_FILE -m pip install -r requirements.txt
 
-podman run -it -v $(pwd):/src kicsikrumpli/wine-pyinstaller -F --onefile --console \
+wine $PYTHON_EXE_FILE -m pyinstaller -F --onefile --console \
  --additional-hooks-dir=. --add-data ./config.py;config.py --add-data ./modules/*;modules/ --add-data ./apps/*;apps/ \
   $py_deps_ticlock --add-data ./log/*;log/ -i ./docs/icon.png -n ticlock -c main.py
 
