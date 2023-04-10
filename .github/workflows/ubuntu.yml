@@ -28,7 +28,7 @@ jobs:
           run: cd /artifacts/AppImage && sha256sum * > sha256sum.txt
 
         - name: Generate SHA256 checksum for Binary.
-          run: cd /artifacts/Binary && sha256sum * > sha256sum.txt
+          run: cd /artifacts/Binary && sudo sha256sum * > sha256sum.txt
 
         - name: Upload AppImage.
           uses: actions/upload-artifact@v2

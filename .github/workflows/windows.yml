@@ -25,7 +25,7 @@ jobs:
           run: sudo mkdir -p /artifacts/Binary && sudo cp /runner/page/ticlock.exe /artifacts/Binary/
 
         - name: Generate SHA256 checksum for Binary.
-          run: cd /artifacts/Binary && sha256sum * > sha256sum.txt
+          run: cd /artifacts/Binary && sudo sha256sum * > sha256sum.txt
         
         - name: Upload Binary.
           uses: actions/upload-artifact@v2
