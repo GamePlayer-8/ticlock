@@ -53,6 +53,8 @@ wine $PYTHON_EXE_FILE /get-pip.py
 
 export WINEPATH=$(winepath -w /python/Scripts)\;$(winepath -w /python)
 
+wine $PYTHON_EXE_FILE -m ensurepip
+
 wine $PYTHON_EXE_FILE -m pip install --upgrade setuptools wheel > /dev/null
 wine $PYTHON_EXE_FILE -m pip install pyinstaller > /dev/null
 
