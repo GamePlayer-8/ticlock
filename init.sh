@@ -71,11 +71,8 @@ strip ticlock
 
 chmod +x ticlock
 
-cd /
-tar -xzf /source/installer.apk
 cd /source
 
-rm -f installer.apk
 /sbin/apk.static -X https://dl-cdn.alpinelinux.org/alpine/latest-stable/main -U --allow-untrusted -p /source/ticlock.AppDir/ --initdb add --no-cache alpine-base busybox libc6-compat
 
 cd ticlock.AppDir/
